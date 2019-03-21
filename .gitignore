@@ -1,1 +1,8 @@
 *.xml
+.Rproj.user
+*.csv
+*.zip
+*.Rdata
+*.Rhistory
+*.Rproj
+old_examples/
