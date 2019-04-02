@@ -1,4 +1,5 @@
 *.xml
+*.xml*
 .Rproj.user
 *.csv
 *.zip
@@ -6,3 +7,4 @@
 *.Rhistory
 *.Rproj
 old_examples/
+components/

@@ -1,0 +1,27 @@
+
+<!-- Display Parameters -->
+	<atc:update_rate>20</atc:update_rate>
+	<atc:scenario_tester>1</atc:scenario_tester>
+	<atc:horizontal_doms>5</atc:horizontal_doms>
+	<atc:vertical_doms>1000</atc:vertical_doms> 
+	
+<atc:colours>
+	<atc:conflict_colour atc:blink='true'>orange</atc:conflict_colour> 
+	<atc:cs_none_colour>black</atc:cs_none_colour> 
+	<!-- <atc:cs_annonced_colour>orange</atc:cs_annonced_colour> -->
+	<atc:cs_accepted_colour>navy</atc:cs_accepted_colour> 
+	<!-- <atc:cs_handoff_colour>yellow</atc:cs_handoff_colour> -->
+	<!-- <atc:cs_nomore_colour>white</atc:cs_nomore_colour> -->
+	<!-- <atc:cs_overout_colour>white</atc:cs_overout_colour> -->
+	<!-- <atc:cs_proposed_colour atc:blink="true">#FF8000</atc:cs_proposed_colour> -->
+</atc:colours>
+
+<!-- Experimental Phase Tools --> 
+<atc:select_tools>
+	<atc:scale atc:position='LEFT' atc:fixed='true'/>
+	<atc:airspeed/>
+</atc:select_tools>
+<atc:initial_tools>
+	<atc:srprobe_tool atc:toggle='1'/>
+</atc:initial_tools>
+

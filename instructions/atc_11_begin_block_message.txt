@@ -1,0 +1,20 @@
+
+<!--#####################################-->
+<!--##### START EXPERIMENTAL TRIALS #####-->
+<!--#####################################-->
+
+<!-- Display Begin Block Message -->
+<atc:phase atc:idx='beginBlockMessage'>
+	<atc:instruction atc:idxref='beginBlock'/>
+</atc:phase>
+
+<!-- Display Quick and Accurate Message -->
+<atc:phase atc:idx='displayQuickAccurateMessage'>
+	<atc:instruction atc:idxref='QuickAccurateMessage'/>
+</atc:phase>
+
+
+<!--#######################################-->
+<!--##### PRESENT EXPERIMENTAL TRIALS #####-->
+<!--#######################################-->
+

@@ -1,0 +1,21 @@
+<!--#####################################################################################################-->
+<!--############################################################################ ATC SCORING SYSTEM #####-->
+<!--#####################################################################################################-->
+
+    <atc:scoring>
+        <atc:initial                    atc:value='0'/>
+        <atc:hit_conflict_ontime        atc:value='10'   atc:audio='' atc:duration='0' atc:delay='0'/>
+        <atc:hit_non_conflict           atc:value='10'   atc:audio='' atc:duration='0' atc:delay='0'/>
+        <atc:hit_other_ontime           atc:value='10'   atc:audio='' atc:duration='0' atc:delay='0'/>
+        <atc:false_alarm_conflict       atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+        <atc:false_alarm_non_conflict   atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+        <atc:false_alarm_other          atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+		<atc:miss_conflict          	atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+		<atc:miss_non_conflict          atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+		<atc:miss_other_conflict        atc:value='-10'  atc:audio='' atc:duration='0' atc:delay='0'/>
+    </atc:scoring>
+
+<!--#####################################################################################################-->
+<!--#####################################################################################################-->
+<!--#####################################################################################################-->
+	

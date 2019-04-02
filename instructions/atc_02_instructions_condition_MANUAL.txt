@@ -1,0 +1,47 @@
+	
+<!--#######################################-->
+<!--####### EXPERIMENT INSTRUCTIONS #######-->
+<!--#######################################-->
+	
+
+<!-- Time Limit Info: Condition A -->
+	<atc:instruction atc:idx='TimeInfo'>
+		<atc:font/>
+		<atc:text>
+		<![CDATA[<qt>
+		<center>
+		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <tr><td align="left"><font face="calibri" size="1">
+			
+				<p align="center"><font face="calibri" size="8"><b>TIME LIMIT: 8 SECONDS</b></font></p>
+				
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
+				
+		    </font></td></tr>
+	    	</table>
+		</center>
+		</qt>]]>
+		</atc:text>
+		<atc:keyEvent>Space</atc:keyEvent>
+	</atc:instruction>
+	
+<!-- Traffic Load Info: Condition A -->
+	<atc:instruction atc:idx='LoadInfo'>
+		<atc:font/>
+		<atc:text>
+		<![CDATA[<qt>
+		<center>
+		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <tr><td align="left"><font face="calibri" size="1">
+			
+				<p align="center"><font face="calibri" size="8"><b>TRAFFIC LEVEL: 2 PAIRS</b></font></p>
+				
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
+				
+		    </font></td></tr>
+	    	</table>
+		</center>
+		</qt>]]>
+		</atc:text>
+		<atc:keyEvent>Space</atc:keyEvent>
+	</atc:instruction>

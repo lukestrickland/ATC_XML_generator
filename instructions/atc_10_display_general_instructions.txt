@@ -1,0 +1,25 @@
+
+<!--#######################################-->
+<!--######## DISPLAY INSTRUCTIONS #########-->
+<!--#######################################-->
+
+<!-- Response Interface -->
+<atc:ui atc:idx='ui01'></atc:ui>
+</atc:data>
+<atc:presentation>
+
+<!-- Display Time Limit Info -->
+<atc:phase atc:idx='displayTimeInfo'>
+	<atc:instruction atc:idxref='TimeInfo'/>
+</atc:phase>
+
+<!-- Display Traffic Load Info -->
+<atc:phase atc:idx='displayLoadInfo'>
+	<atc:instruction atc:idxref='LoadInfo'/>
+</atc:phase>
+
+<!-- Display Response Key Info -->
+<atc:phase atc:idx='displayResponseKeyInfo'>
+	<atc:instruction atc:idxref='ResponseKeyInfo'/>
+</atc:phase>
+

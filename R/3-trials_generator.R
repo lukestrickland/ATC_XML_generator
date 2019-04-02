@@ -1,20 +1,14 @@
 ###############################################################################
 ############################################ Trials Generator for ATC-LAB #####
 ###############################################################################
-rm(list = ls())
-
-# library(XML)
-
 
 ###############################################################################
 ############################################ Enter experimental variables #####
 ###############################################################################
-condition <- 'd'
-block <- 'control'
-timePressure <- 4  # Time Pressure (seconds)
+condition <- 'AUTO'
+timePressure <- 8  # Time Pressure (seconds)
 trafficLoad <- 1
-nTrials <- 84  # N Control Trials (84)
-# nTrials <- 240  # N PM Trials (240)
+nTrials <- 10  # N Control Trials (84)
 
 TP <- timePressure*1000
 nPairs <- trafficLoad*nTrials
@@ -31,7 +25,7 @@ for (i in 1:nTrials){
     '<!-- Condition ', condition[i], ' Trial ', trialNumber[i], ' -->', '\n',
     '<atc:phase atc:idx=', '\'', 'cond_', condition[i], '_trial_', trialNumber[i], '\'', '>', '\n',
     '<atc:instruction atc:idxref=', '\'', 'interTrialInfo', '\'', '/>', '\n',
-    '<atc:block_trial atc:waitTimeOut=', '\'', 'true', '\'', '>', '\n\n', sep = '')
+    '<atc:block_trial atc:waitTimeOut=', '\'', 'false', '\'', '>', '\n\n', sep = '')
 }
 
 xml_trials <- as.data.frame.character(xml_trials)
@@ -66,15 +60,9 @@ xml_TP
 
 trials <- cbind(xml_trials, xml_load_split.T, xml_TP)
 
-# Name columns depending on traffic load
-if (trafficLoad == 2){
-    colnames(trials) <- c("trial", "pair1", "pair2", "TP")
-} else if (trafficLoad == 4){
-    colnames(trials) <- c("trial", "pair1", "pair2", "pair3", "pair4", "TP")
-} else if (trafficLoad == 5){
-  colnames(trials) <- c("trial", "pair1", "pair2", "pair3", "pair4", "pair5", "TP")
-}
+colnames(trials) <- c("xml_trials", "pair1", "xml_TP")
 
-write.csv(trials, paste('xml_trials_', condition[1], '_', block, '.csv', sep = ''), row.names = FALSE)
+write.csv(trials, paste('components/xml_trials_', condition[1], '.csv', sep = ''), row.names = FALSE)
 
-
+#Read in training exp_vars
+#create training feedback using training exp_vars

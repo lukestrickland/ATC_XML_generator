@@ -1,0 +1,50 @@
+<!--#######################################-->
+<!--############## PREAMBLE ###############-->
+<!--#######################################-->
+
+<!--
+	@project	: Experiment 1 Conflict Detection Task
+	@author		: $Russell J. Boag$
+	@affiliation: $University of Western Australia$
+	@version	: $2.8.8$
+	@date		: $18 February 2016$
+-->
+
+<!--#######################################-->
+<!--########### CONFIGURATION #############-->
+<!--#######################################-->
+<atc:experiment 
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xmlns:atc='http://www.humanfactors.uq.edu.au/atc/2006/atc-ns' 
+	xsi:schemaLocation='http://www.humanfactors.uq.edu.au/atc/2006/atc-ns atc_lab-2006-05.xsd' 
+	atc:idx='RJB_001'>
+
+    <atc:global>
+        <atc:variable atc:name='score'              atc:type='int' atc:init='0' atc:value='0'/>
+        <atc:variable atc:name='grand_total_score'  atc:type='int' atc:init='0' atc:value='0'/>
+    </atc:global>
+    
+<atc:config>
+
+<!-- Units -->
+	<atc:units>
+		<atc:input>NM-FT</atc:input> <!-- (Nautical Miles, Feet) -->
+	</atc:units>
+    
+<!-- Aircraft Performance Data  -->
+	<atc:aircraftParams atc:idx='B737'/>
+	<atc:aircraftParams atc:idx='DH8C'/>
+	<atc:aircraftParams atc:idx='A320'/>
+	<atc:aircraftParams atc:idx='B744'/>
+	<atc:aircraftParams atc:idx='B772'/>
+	<atc:aircraftParams atc:idx='A333'/>
+	<atc:aircraftParams atc:idx='SF34'/>
+	<atc:aircraftParams atc:idx='B763'/>
+	<atc:aircraftParams atc:idx='B733'/>
+	<atc:aircraftParams atc:idx='B734'/>
+	<atc:aircraftParams atc:idx='C550'/>
+	<atc:aircraftParams atc:idx='SW3'/>
+	<atc:aircraftParams atc:idx='SW4'/>
+	<atc:aircraftParams atc:idx='BE20'/>
+	
+	
