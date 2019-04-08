@@ -3,7 +3,7 @@ library('stringr')
 
 source('R/0-combiner_functions.R')
 
-n_participants <- 100
+n_participants <- 32
 participant_number <- c(1:n_participants)
 
 key_set <- c(1,1, 2, 2)
@@ -78,3 +78,31 @@ for (ppt in participant_number){
                                       '_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
   }
 }
+
+
+##Workable training example
+
+instructions_cond <- toString(readtext(file = paste(
+  'instructions/atc_02_instructions_condition_', 'AUTO' ,'.txt', sep = "")))
+
+conflict_feedback <- toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
+
+instructions <- paste(instructions_cond, '\n\n', instructions_key, '\n\n',
+                      conflict_feedback )
+
+maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
+
+training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
+
+
+
+training_XML<- paste(preamble, instructions,
+                     mapaircraft_preamble,display_parameters,
+                     response_key_set,
+                     clock_position, maps, display_general_instructions,
+                     begin_block_message,
+                     training_trials, post)
+
+
+writeLines(training_XML, "training_XML.xml", sep = '\n\n')
+

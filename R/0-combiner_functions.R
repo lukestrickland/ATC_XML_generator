@@ -1,8 +1,9 @@
-read_trial_csv <- function(csvname){
+read_trial_csv <- function(csvname, training=FALSE){
   trial_df <- read.csv(csvname)
   trial_df$pair1 <- paste("\t", trial_df$pair1, sep="")
   trial_df$xml_TP<- paste("\t", trial_df$xml_TP, sep="")
   trial_vec <- paste(trial_df$xml_trials, trial_df$pair1, trial_df$xml_TP)
+  if(training) trial_vec <- paste(trial_vec, trial_df$feedback)
   paste(trial_vec, collapse="")
 }
 

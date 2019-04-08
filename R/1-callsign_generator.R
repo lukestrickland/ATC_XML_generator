@@ -15,5 +15,4 @@ callsign <- cbind(alpha, cs_num)
 callsign <- callsign %>% mutate(CS = paste(alpha1, alpha2,alpha3, cs_num, sep=""))
 
 
-
-write.csv(callsign, file = "callsigns.csv", row.names = FALSE)
+write.csv(callsign, file = "components/callsigns.csv", row.names = FALSE)

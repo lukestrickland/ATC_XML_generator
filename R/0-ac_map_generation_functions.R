@@ -39,10 +39,10 @@ create_exp_var_df <- function(nPairs, callsigns){
                 ac2_speed = sample(400:700, nPairs, replace = TRUE),
                 DOMS, 
               #sample TTMS
-              TTMS = sample(120:210, nPairs, replace = TRUE), 
+                TTMS = sample(120:210, nPairs, replace = TRUE), 
               #OOP - alternating 1s and 2s (will be randomized because aircraft
               #are presented by presOrder)
-              OOP= rep(c(1, 2), 0.5*nPairs),
+                OOP= rep(c(1, 2), 0.5*nPairs),
               #set stimulus as conflict_status in case we need it (Don't know what it does)
                 conflict_status, stimulus=conflict_status)
 }
@@ -74,6 +74,7 @@ add_matched_auto_fails_reshuffle <- function (manual_exp_var_df,
                            "ac1_fl", "ac2_fl", "angle", "ac1_speed",
                            "ac2_speed", "DOMS", "TTMS", "OOP", "conflict_status",
                            "stimulus", "failtrial")
+  browser()
   manual_exp_var_df$failtrial = FALSE
   #replace numbers for as many manual conflicts as necessary  
   manual_exp_var_df[manual_exp_var_df$conflict_status=='conflict',
@@ -113,8 +114,8 @@ create_sim_input_df <- function(exp_var_df, aspectRatio, x_dim){
   #convert aircraft speed
   v1m_sec <- exp_var_df$ac1_speed/60/60
   v2m_sec <- exp_var_df$ac2_speed/60/60
-  #crazy ATC math implemented by p.lindsay
-  #will get derivations when he's back from Costa Rica
+  #ATC math implemented by p.lindsay
+  #now verified to be correct
   radians <- exp_var_df$angle*pi/180
   A <- v1m_sec^2 + v2m_sec^2 - 2*v1m_sec*v2m_sec*cos(radians)
   Y <- v1m_sec*v2m_sec*sin(radians)
@@ -122,18 +123,16 @@ create_sim_input_df <- function(exp_var_df, aspectRatio, x_dim){
   absM <- exp_var_df$DOMS*sqrt(A)/Y
   #For exp_var_df$OOP of 1 set absM to negative, for exp_var_df$OOP of 2 positive
   M <- (-1)^exp_var_df$OOP * absM
-
-  TCOP1 <- exp_var_df$TTMS - (v1m_sec*M*W)/A #################################### New TCOP1
-  TCOP2 <- exp_var_df$TTMS - (v2m_sec*M*W)/A #################################### New TCOP2
-  
+  #TCOP calculations verified in lab notes
+  TCOP1 <- exp_var_df$TTMS - (v2m_sec*M*W)/A
+  TCOP2 <- TCOP1 + M
   # Radial distances (relative distance of each aircraft from the intersection point 
    #required to produce the specified spatial and temporal properties of the event. )
   Dist1 <- TCOP1*v1m_sec
   Dist2 <- TCOP2*v2m_sec
-  
   # randomly sample polar angles for the first aircraft path
   #then add angle to determine the second
-  theta1 <- degtorad(sample(0:360, nPairs, replace = TRUE))
+  theta1 <- degtorad(sample(0:360, length(exp_var_df$presOrder), replace = TRUE))
   theta2 <- theta1 + degtorad(exp_var_df$angle)
 
   # Cartesian coordinates AC1
@@ -160,6 +159,26 @@ create_sim_input_df <- function(exp_var_df, aspectRatio, x_dim){
   
   tibble(x_dim, y_dim, x1, x2, y1, y2, x1start, x2start, y1start, y2start, x1end,
                       x2end, y1end, y2end)
+
+}
+
+write_exp_data <- function(condition, exp_var_df, sim_input_df,
+                      maps_and_ac, p, session){
+  
+  write.csv(sim_input_df, paste('data/sim_inputs_', condition, '_p', 
+                                       p, '_', 's', 
+                                       session, '_', toupper(condition), 
+                                       '.csv', sep = ''))
+  
+  write.csv(exp_var_df, paste('data/exp_vars_', condition,'_p', 
+                                     p, '_', 's', 
+                                     session, '_', toupper(condition), 
+                                     '.csv', sep = ''))
+  
+  writeLines(maps_and_ac, paste('components/atc_09_maps_and_ac_p', 
+                                       p, '_', 's', 
+                                       session, '_', toupper(condition), 
+                                       '.txt', sep = ''), sep = '\n\n')
   
 }
 
@@ -238,7 +257,7 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
     xml_maps[i] <- paste(
       '<!-- Map ', presOrder[i], ' -->', '\n',
       '<atc:map atc:idx=', '\'', 'map', presOrder[i], '\'', '>', '\n\n',
-      '<!-- Map dimensions -->', '\n',
+      '<!-- Map Dimensions -->', '\n',
       '<atc:region atc:x=', '\'', 0, '\'', ' atc:y=', '\'', 0, '\'', ' atc:x_dim=', '\'', x_dim[i], 
       '\'', ' atc:y_dim=', '\'', y_dim[i], '\'', '/>', '\n\n',
       

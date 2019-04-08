@@ -1,0 +1,41 @@
+<!-- Conflict Feedback -->
+	<atc:instruction atc:idx="trainingConflictFeedback">
+		<atc:font/>
+        <atc:text>
+        <![CDATA[<qt>
+        <center>
+            <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+            <tr><td align="left"><font face="calibri" size="1">
+                
+				<p align="center"><font face="calibri" size="8"><b>THOSE AIRCRAFT WERE A <font color="red"><i>CONFLICT</i></font color="red"> PAIR</b></font></p>
+                
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey"><font size="+1">Press <b>SPACE</b> to continue.</font></p>
+            
+			</font></td></tr>
+            </table>
+        </center>
+        </qt>]]>
+        </atc:text>
+		<atc:keyEvent>Space</atc:keyEvent>
+    </atc:instruction>
+
+<!-- Nonconflict Feedback -->
+	<atc:instruction atc:idx="trainingNonconflictFeedback">
+		<atc:font/>
+        <atc:text>
+        <![CDATA[<qt>
+        <center>
+            <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+            <tr><td align="left"><font face="calibri" size="1">
+			
+                <p align="center"><font face="calibri" size="8"><b>THOSE AIRCRAFT WERE A <font color= "forestgreen"><i>NONCONFLICT</i></font color= "forestgreen"> PAIR</b></font></p>
+                
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey"><font size="+1">Press <b>SPACE</b> to continue.</font></p>
+            
+			</font></td></tr>
+            </table>
+        </center>
+        </qt>]]>
+        </atc:text>
+		<atc:keyEvent>Space</atc:keyEvent>
+    </atc:instruction>

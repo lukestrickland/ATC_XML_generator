@@ -1,10 +1,6 @@
-###############################################################################
-#################################### Map & Aircraft Generator for ATC-LAB #####
-###############################################################################
 library(tidyverse)
 source("R/0-ac_map_generation_functions.R")
-
-callsigns <- read.csv('callsigns.csv', header = TRUE, sep = ",")$CS
+callsigns <- read.csv('components/callsigns.csv', header = TRUE, sep = ",")$CS
 
 ###############################################################################
 ############################################ Enter experimental variables #####
@@ -13,7 +9,8 @@ n_participants <- 32
 conds <- factor(c("AUTO", "MANUAL"))
 sessions <- 2
 participant_number <- 1:n_participants
-nPairs=10
+#nPairs per block (total trial N / sessions * length(conds))
+nPairs=600
 failure_rate = 0.1
 
 
@@ -46,6 +43,7 @@ for (p in participant_number){
     
     manual_sim_input_df <- create_sim_input_df(exp_var_df =  manual_exp_var_df,
                                              aspectRatio = 0.625, x_dim=180)
+
     
     auto_maps_and_ac <- create_xml_ac_and_maps(
                         "auto", auto_exp_var_df, auto_sim_input_df)
@@ -53,17 +51,24 @@ for (p in participant_number){
     manual_maps_and_ac <- create_xml_ac_and_maps(
                         "manual", manual_exp_var_df, manual_sim_input_df)
     
-    writeLines(auto_maps_and_ac, paste('components/atc_09_maps_and_ac_p', 
-                                  participant_number[p], '_', 's', 
-                                  session, '_', "AUTO", 
-                                  '.txt', sep = ''), sep = '\n\n')
+    #writes exp var df to csv, sim input to csv, maps and ac to txt files
+    write_exp_data('manual', manual_exp_var_df, manual_sim_input_df,
+              manual_maps_and_ac, p, session)
     
-    writeLines(manual_maps_and_ac, paste('components/atc_09_maps_and_ac_p', 
-                                       participant_number[p], '_', 's', 
-                                       session, '_', "MANUAL", 
-                                       '.txt', sep = ''), sep = '\n\n')
+    write_exp_data('auto', auto_exp_var_df, auto_sim_input_df,
+              auto_maps_and_ac, p, session)
   }
   cat(paste("p", p, " ", sep=""))
 }
 
+#Create training (manual condition only)
+
+training_exp_var_df <- create_exp_var_df(nPairs=10, callsigns=callsigns)
+training_sim_input_df <- create_sim_input_df(exp_var_df = training_exp_var_df,
+                                         aspectRatio = 0.625, x_dim=180)
+training_maps_and_ac <- create_xml_ac_and_maps(
+  "training", training_exp_var_df, training_sim_input_df)
+
+write_exp_data('training', training_exp_var_df, training_sim_input_df,
+               training_maps_and_ac, p = "_ALL", session=0)
 
