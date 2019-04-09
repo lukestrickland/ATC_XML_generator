@@ -12,7 +12,7 @@
 		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="8"><b>AUTO INSTRUCTIONS</b></font></p>
+				<p align="center"><font face="calibri" size="8"><b>AUTOMATION BLOCK</b></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				
@@ -30,10 +30,17 @@
 		<atc:text>
 		<![CDATA[<qt>
 		<center>
-		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="8"><b>TRAFFIC LEVEL: 2 PAIRS</b></font></p>
+				<p align="center"><font face="calibri" size="8">In this block you will be provided with a decision aid. Based on an algorithm,
+				the decision aid recommends a classification (conflict or nonconflict) for each aircraft pair. </font></p>
+				<p align="center"><font face="calibri" size="8">Your decision aid for each trial is presented in the data blocks of both aircraft. If it says 'conflict', 
+				it recommends classifying the aircraft pair as in conflict. If it says 'nonconflict', 
+				it recommends classifying the aircraft pair as not in conflict.</font></p></font></p>
+			
+				<p align="center"><font face="calibri" size="8"><b>Please note that your decision aid may fail</b>. Ultimately, it is YOUR responsibility to determine 
+				the conflict status of the aircraft pairs.</font></p></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				

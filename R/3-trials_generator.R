@@ -7,8 +7,12 @@ source("R/0-trials_generator_functions.R")
 ###############################################################################
 conds <- c("MANUAL", "AUTO")
 
+nTrials=600
+
+##add some break syntax and code to insert a break
+
 for (cond in conds) {
-  trials <- create_trials('AUTO', 8, 1, nTrials)
+  trials <- create_trials(cond, 8, 1, nTrials)
   write.csv(trials,
             paste('components/xml_trials_',
                   cond, '.csv', sep = ''),
@@ -18,7 +22,7 @@ for (cond in conds) {
 
 #Read in training exp_vars
 #create training feedback using training exp_vars
-training_trials <- create_trials('TRAINING', 240, 1, 10)
+training_trials <- create_trials('TRAINING', 8, 1, 40)
 training_data <- read.csv("data/exp_vars_training_p_ALL_s0_TRAINING.csv")
 conflict_status <- as.character(training_data$conflict_status[order(training_data$presOrder)])
 

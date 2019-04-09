@@ -8,7 +8,7 @@ read_trial_csv <- function(csvname, training=FALSE){
 }
 
 
-create_xml_script <- function(cond, sess, preamble, mapaircraft_preamble, 
+create_xml_script <- function(ppt, cond, sess, preamble, mapaircraft_preamble, 
                               display_parameters, response_key_set, clock_position,
                               display_general_instructions, begin_block_message, post){
   
@@ -18,7 +18,7 @@ create_xml_script <- function(cond, sess, preamble, mapaircraft_preamble,
   instructions <- paste(instructions_cond, '\n\n', instructions_key)
   
   maps <- toString(readtext(file = paste(
-    'components/atc_09_maps_and_ac_p1_s', sess, '_', cond, '.txt', sep = "")))
+    'components/atc_09_maps_and_ac_p', ppt, '_s', sess, '_', cond, '.txt', sep = "")))
   
   trials <- read_trial_csv(paste('components/xml_trials_', cond, '.csv', sep=""))
   

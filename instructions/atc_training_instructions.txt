@@ -3,7 +3,6 @@
 <!--####### EXPERIMENT INSTRUCTIONS #######-->
 <!--#######################################-->
 	
-
 <!-- Time Limit Info: Condition A -->
 	<atc:instruction atc:idx='TimeInfo'>
 		<atc:font/>
@@ -13,7 +12,7 @@
 		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="8"><b>MANUAL INSTRUCTIONS</b></font></p>
+				<p align="center"><font face="calibri" size="8"><b>TRAINING BLOCK</b></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				
@@ -31,11 +30,12 @@
 		<atc:text>
 		<![CDATA[<qt>
 		<center>
-		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="8"><b>TRAFFIC LEVEL: 2 PAIRS</b></font></p>
-				
+				<p align="center"><font face="calibri" size="8">You will now complete a training block to familiarize you with the task. </font></p>
+				<p align="center"><font face="calibri" size="8">Your task is to determine whether aircraft pairs will, at any point in their flight, 
+					reach conflict. As this is the training block, you will be informed after each trial whether the aircraft would reach conflict or not.
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				
 		    </font></td></tr>

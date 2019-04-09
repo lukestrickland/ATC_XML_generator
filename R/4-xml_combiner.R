@@ -58,7 +58,7 @@ for (ppt in participant_number){
       blk2 <- cond[[counterbalance]][4]
     }
     
-    xml_script_blk1 <- create_xml_script(blk1, sess, preamble,
+    xml_script_blk1 <- create_xml_script(ppt, blk1, sess, preamble,
                                          mapaircraft_preamble, display_parameters,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
@@ -66,43 +66,47 @@ for (ppt in participant_number){
     
     
     writeLines(xml_script_blk1, paste('XML/ppt', ppt,'_sess', sess,
-                                      '_cond_', blk1, '.xml', sep = ''), sep = '\n\n')
+                                      '_block1_cond_', blk1, '.xml', sep = ''), sep = '\n\n')
     
-    xml_script_blk2 <- create_xml_script(blk2, sess, preamble,
+    xml_script_blk2 <- create_xml_script(ppt, blk2, sess, preamble,
                                          mapaircraft_preamble, display_parameters,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
                                          begin_block_message, post)
     
-    writeLines(xml_script_blk1, paste('XML/ppt', ppt,'_sess', sess,
-                                      '_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
+    writeLines(xml_script_blk2, paste('XML/ppt', ppt,'_sess', sess,
+                                      '_block2_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
   }
+  
+  #write a training block
+  
+  instructions_cond <- toString(readtext(file ='instructions/atc_training_instructions.txt'))
+  
+  conflict_feedback <- toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
+  
+  instructions <- paste(instructions_cond, '\n\n', instructions_key, '\n\n',
+                        conflict_feedback )
+  
+  maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
+  
+  training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
+  
+  
+  training_XML<- paste(preamble, instructions,
+                       mapaircraft_preamble,display_parameters,
+                       response_key_set,
+                       clock_position, maps, display_general_instructions,
+                       begin_block_message,
+                       training_trials, post)
+  
+  
+  writeLines(training_XML, paste("XML/training_p", ppt, ".xml", sep=""), sep = '\n\n')
+  
+  cat(ppt)
 }
 
 
 ##Workable training example
 
-instructions_cond <- toString(readtext(file = paste(
-  'instructions/atc_02_instructions_condition_', 'AUTO' ,'.txt', sep = "")))
 
-conflict_feedback <- toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
-
-instructions <- paste(instructions_cond, '\n\n', instructions_key, '\n\n',
-                      conflict_feedback )
-
-maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
-
-training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
-
-
-
-training_XML<- paste(preamble, instructions,
-                     mapaircraft_preamble,display_parameters,
-                     response_key_set,
-                     clock_position, maps, display_general_instructions,
-                     begin_block_message,
-                     training_trials, post)
-
-
-writeLines(training_XML, "training_XML.xml", sep = '\n\n')
 

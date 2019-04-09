@@ -50,7 +50,6 @@ for (p in participant_number){
     
     manual_maps_and_ac <- create_xml_ac_and_maps(
                         "manual", manual_exp_var_df, manual_sim_input_df)
-    
     #writes exp var df to csv, sim input to csv, maps and ac to txt files
     write_exp_data('manual', manual_exp_var_df, manual_sim_input_df,
               manual_maps_and_ac, p, session)
@@ -63,7 +62,7 @@ for (p in participant_number){
 
 #Create training (manual condition only)
 
-training_exp_var_df <- create_exp_var_df(nPairs=10, callsigns=callsigns)
+training_exp_var_df <- create_exp_var_df(nPairs=40, callsigns=callsigns)
 training_sim_input_df <- create_sim_input_df(exp_var_df = training_exp_var_df,
                                          aspectRatio = 0.625, x_dim=180)
 training_maps_and_ac <- create_xml_ac_and_maps(

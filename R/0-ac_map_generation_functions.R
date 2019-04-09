@@ -74,20 +74,20 @@ add_matched_auto_fails_reshuffle <- function (manual_exp_var_df,
                            "ac1_fl", "ac2_fl", "angle", "ac1_speed",
                            "ac2_speed", "DOMS", "TTMS", "OOP", "conflict_status",
                            "stimulus", "failtrial")
-  browser()
+ 
   manual_exp_var_df$failtrial = FALSE
   #replace numbers for as many manual conflicts as necessary  
   manual_exp_var_df[manual_exp_var_df$conflict_status=='conflict',
                     ][1:length(failtrials$fail_conflicts),
                       columns_to_replace] <-
-    auto_exp_var_df[auto_exp_var_df$presOrder==failtrials$fail_conflicts,
+    auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_conflicts,
                     columns_to_replace]
   
   #replace numbers for as many manual nonconflicts as necessary  
   manual_exp_var_df[manual_exp_var_df$conflict_status=='nonconflict',
                     ][1:length(failtrials$fail_nonconflicts),
                       columns_to_replace] <-
-    auto_exp_var_df[auto_exp_var_df$presOrder==failtrials$fail_nonconflicts,
+    auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_nonconflicts,
                     columns_to_replace]
   
   #randomly shuffle pres-order of all stimuli not matched to failures so that they don't
@@ -212,11 +212,10 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   x_dim <- sim_input_df$x_dim
   y_dim <- sim_input_df$y_dim
   
-  
   xml_ac <- c()
   xml_maps <- c()
   
-  for (i in 1:nPairs){
+  for (i in 1:length(exp_var_df$presOrder)){
     xml_ac[i] <- paste(
       '<!-- ', toupper(condition), ' Pair ', presOrder[i], ': Aircraft 1 -->', '\n',
       '<atc:sky atc:idx=', '\'', 'sky', presOrder[i], '\'', '>', '\n',
