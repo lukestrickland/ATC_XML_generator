@@ -37,7 +37,7 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
     '</atc:phase>', '\n\n', sep = '')
   xml_TP <- rep(xml_TP, nTrials)
   
-  trials <- cbind(xml_trials, xml_load_split.T, xml_TP)
+  trials <- cbind(xml_trials, xml_load_split.T, xml_TP, stringsAsFactors=FALSE)
   pair_cols <- grep("V", colnames(trials))
   colnames(trials)[pair_cols] <- paste("pair", pair_cols-1, sep="")
   trials

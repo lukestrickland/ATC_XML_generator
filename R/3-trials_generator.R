@@ -9,16 +9,21 @@ conds <- c("MANUAL", "AUTO")
 
 nTrials=600
 
-##add some break syntax and code to insert a break
+block_break <- "\n <atc:phase atc:idx='displayblockBreak'> 
+\t<atc:instruction atc:idxref='blockBreak'/>
+</atc:phase>\n\n"
+
+break_trials <- 0
 
 for (cond in conds) {
   trials <- create_trials(cond, 8, 1, nTrials)
+  trials[break_trials, 3] <-
+    paste(trials[break_trials, 3], block_break)
   write.csv(trials,
             paste('components/xml_trials_',
                   cond, '.csv', sep = ''),
             row.names = FALSE)
 }
-
 
 #Read in training exp_vars
 #create training feedback using training exp_vars

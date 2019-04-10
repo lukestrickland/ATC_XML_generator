@@ -8,14 +8,16 @@ read_trial_csv <- function(csvname, training=FALSE){
 }
 
 
-create_xml_script <- function(ppt, cond, sess, preamble, mapaircraft_preamble, 
+create_xml_script <- function(ppt, cond, sess, preamble, instructions_key,
+                              instructions_gen, mapaircraft_preamble, 
                               display_parameters, response_key_set, clock_position,
                               display_general_instructions, begin_block_message, post){
   
   instructions_cond <- toString(readtext(file = paste(
     'instructions/atc_02_instructions_condition_', cond ,'.txt', sep = "")))
   
-  instructions <- paste(instructions_cond, '\n\n', instructions_key)
+  instructions <- paste(instructions_cond, '\n\n', instructions_key, 
+                        '\n\n', instructions_gen)
   
   maps <- toString(readtext(file = paste(
     'components/atc_09_maps_and_ac_p', ppt, '_s', sess, '_', cond, '.txt', sep = "")))

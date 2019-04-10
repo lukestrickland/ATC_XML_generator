@@ -25,6 +25,8 @@ for (ppt in participant_number){
   instructions_key <- toString(readtext(file = paste(
     'instructions/atc_03_instructions_responsekeys_', cb_key,'.txt', sep = "")))
   
+  instructions_gen <- toString(readtext(file ='instructions/atc_04_0_genericinstructions.txt'))
+  
   response_key_set <- toString(readtext(file = 
                                           paste('instructions/atc_05_responseKeySet_',
                                                   cb_key, '.txt', sep = "")))
@@ -58,8 +60,10 @@ for (ppt in participant_number){
       blk2 <- cond[[counterbalance]][4]
     }
     
-    xml_script_blk1 <- create_xml_script(ppt, blk1, sess, preamble,
-                                         mapaircraft_preamble, display_parameters,
+    xml_script_blk1 <- create_xml_script(ppt, blk1, sess, preamble, instructions_key,
+                                         instructions_gen,
+                                         mapaircraft_preamble, 
+                                         display_parameters,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
                                          begin_block_message, post)
@@ -68,8 +72,9 @@ for (ppt in participant_number){
     writeLines(xml_script_blk1, paste('XML/ppt', ppt,'_sess', sess,
                                       '_block1_cond_', blk1, '.xml', sep = ''), sep = '\n\n')
     
-    xml_script_blk2 <- create_xml_script(ppt, blk2, sess, preamble,
-                                         mapaircraft_preamble, display_parameters,
+    xml_script_blk2 <- create_xml_script(ppt, blk2, sess, preamble,instructions_key,
+                                         instructions_gen, mapaircraft_preamble, 
+                                         display_parameters,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
                                          begin_block_message, post)
@@ -105,8 +110,6 @@ for (ppt in participant_number){
   cat(ppt)
 }
 
-
-##Workable training example
 
 
 
