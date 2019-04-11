@@ -3,6 +3,47 @@ library('stringr')
 
 source('R/0-combiner_functions.R')
 
+###Read in all the generic XML that 
+#doesn't change over participants
+preamble <-
+  toString(readtext(file = "instructions/atc_01_preamble.txt"))
+
+instructions_gen <-
+  toString(readtext(file = 'instructions/atc_04_0_genericinstructions.txt'))
+
+mapaircraft_preamble <- toString(readtext(
+  file = 'instructions/atc_04_aircraft_parameters.txt'))
+
+display_parameters <-
+  toString(readtext(file = 'instructions/atc_06_display_parameters.txt'))
+
+scoring <- toString(readtext(file = 
+                               'instructions/atc_07_scoring_system_neutral.txt'))
+
+clock_position <- toString(readtext(file = 
+                                      'instructions/atc_08_clock_position.txt'))
+
+display_general_instructions <- toString(readtext(file = 
+                                                    'instructions/atc_10_display_general_instructions.txt'))
+
+begin_block_message <- toString(
+  readtext(file = paste('instructions/atc_11_begin_block_message.txt', sep = "")))
+
+post <- toString(readtext(file = paste(
+  'instructions/atc_12_post-task_screen','.txt', sep = "")))
+
+instructions_train <-
+  toString(readtext(file = 'instructions/atc_training_instructions.txt'))
+
+conflict_feedback <-
+  toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
+
+maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
+
+training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
+
+##Set up loops to generate the rest of the XML separately for each participant
+
 n_participants <- 32
 participant_number <- c(1:n_participants)
 
@@ -12,45 +53,19 @@ cond <- list(c("AUTO", "MANUAL", "MANUAL", "AUTO"),
              c( "MANUAL", "AUTO", "AUTO", "MANUAL"),
              c("AUTO", "MANUAL", "MANUAL", "AUTO"),
              c( "MANUAL", "AUTO", "AUTO", "MANUAL")
-             )
+)
 
 for (ppt in participant_number){
   
   counterbalance <- (participant_number[ppt] %% 4) + 1
   cb_key <- key_set[counterbalance]
   
-  
-  preamble <- toString(readtext(file = "instructions/atc_01_preamble.txt"))
-  
   instructions_key <- toString(readtext(file = paste(
     'instructions/atc_03_instructions_responsekeys_', cb_key,'.txt', sep = "")))
-  
-  instructions_gen <- toString(readtext(file ='instructions/atc_04_0_genericinstructions.txt'))
   
   response_key_set <- toString(readtext(file = 
                                           paste('instructions/atc_05_responseKeySet_',
                                                   cb_key, '.txt', sep = "")))
-  
-  mapaircraft_preamble <- toString(readtext(file = paste(
-    'instructions/atc_04_aircraft_parameters', '.txt', sep = "")))
-  
-  display_parameters <- toString(readtext(file = 'instructions/atc_06_display_parameters.txt'))
-  
-  scoring <- toString(readtext(file = 
-                                 'instructions/atc_07_scoring_system_neutral.txt'))
-  
-  clock_position <- toString(readtext(file = 
-                                        'instructions/atc_08_clock_position.txt'))
-  
-  display_general_instructions <- toString(readtext(file = 
-                                                      'instructions/atc_10_display_general_instructions.txt'))
-  
-  begin_block_message <- toString(
-    readtext(file = paste('instructions/atc_11_begin_block_message.txt', sep = "")))
-  
-  post <- toString(readtext(file = paste(
-    'instructions/atc_12_post-task_screen','.txt', sep = "")))
-  
   for (sess in 1:2) {
     if (sess == 1) {
       blk1 <- cond[[counterbalance]][1]
@@ -63,7 +78,7 @@ for (ppt in participant_number){
     xml_script_blk1 <- create_xml_script(ppt, blk1, sess, preamble, instructions_key,
                                          instructions_gen,
                                          mapaircraft_preamble, 
-                                         display_parameters,
+                                         display_parameters, scoring,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
                                          begin_block_message, post)
@@ -74,7 +89,7 @@ for (ppt in participant_number){
     
     xml_script_blk2 <- create_xml_script(ppt, blk2, sess, preamble,instructions_key,
                                          instructions_gen, mapaircraft_preamble, 
-                                         display_parameters,
+                                         display_parameters, scoring,
                                          response_key_set, clock_position, 
                                          display_general_instructions, 
                                          begin_block_message, post)
@@ -83,22 +98,11 @@ for (ppt in participant_number){
                                       '_block2_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
   }
   
-  #write a training block
-  
-  instructions_cond <- toString(readtext(file ='instructions/atc_training_instructions.txt'))
-  
-  conflict_feedback <- toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
-  
-  instructions <- paste(instructions_cond, '\n\n', instructions_key, '\n\n',
+  instructions <- paste(instructions_train, '\n\n', instructions_key, '\n\n',
                         conflict_feedback )
   
-  maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
-  
-  training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
-  
-  
   training_XML<- paste(preamble, instructions,
-                       mapaircraft_preamble,display_parameters,
+                       mapaircraft_preamble,display_parameters, scoring,
                        response_key_set,
                        clock_position, maps, display_general_instructions,
                        begin_block_message,

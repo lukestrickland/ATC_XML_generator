@@ -1,3 +1,6 @@
+#read csv with xml containing trial syntax,
+#paste together.
+
 read_trial_csv <- function(csvname, training=FALSE){
   trial_df <- read.csv(csvname)
   trial_df$pair1 <- paste("\t", trial_df$pair1, sep="")
@@ -7,10 +10,12 @@ read_trial_csv <- function(csvname, training=FALSE){
   paste(trial_vec, collapse="")
 }
 
+#inputs:all the ingredients necessary for creating xml script
+#outputs: string of complete XML script
 
 create_xml_script <- function(ppt, cond, sess, preamble, instructions_key,
                               instructions_gen, mapaircraft_preamble, 
-                              display_parameters, response_key_set, clock_position,
+                              display_parameters, scoring, response_key_set, clock_position,
                               display_general_instructions, begin_block_message, post){
   
   instructions_cond <- toString(readtext(file = paste(
@@ -25,7 +30,7 @@ create_xml_script <- function(ppt, cond, sess, preamble, instructions_key,
   trials <- read_trial_csv(paste('components/xml_trials_', cond, '.csv', sep=""))
   
   paste(preamble, instructions,
-        mapaircraft_preamble,display_parameters,
+        mapaircraft_preamble,display_parameters, scoring,
         response_key_set,
         clock_position, maps, display_general_instructions,
         begin_block_message,

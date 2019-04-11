@@ -9,11 +9,12 @@ conds <- c("MANUAL", "AUTO")
 
 nTrials=600
 
+#to paste a block break in at the appropriate place
 block_break <- "\n <atc:phase atc:idx='displayblockBreak'> 
 \t<atc:instruction atc:idxref='blockBreak'/>
 </atc:phase>\n\n"
 
-break_trials <- 0
+break_trials <- 300
 
 for (cond in conds) {
   trials <- create_trials(cond, 8, 1, nTrials)
@@ -28,8 +29,9 @@ for (cond in conds) {
 #Read in training exp_vars
 #create training feedback using training exp_vars
 training_trials <- create_trials('TRAINING', 8, 1, 40)
-training_data <- read.csv("data/exp_vars_training_p_ALL_s0_TRAINING.csv")
-conflict_status <- as.character(training_data$conflict_status[order(training_data$presOrder)])
+training_data <- read.csv("data/exp_vars_p_ALL_s0_TRAINING.csv")
+conflict_status <-
+  as.character(training_data$conflict_status[order(training_data$presOrder)])
 
 feedback <- c()
 

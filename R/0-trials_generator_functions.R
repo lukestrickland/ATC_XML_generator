@@ -1,3 +1,7 @@
+
+#inputs: condition, timepressure, load, ntrials
+#outputs: a data frame full of the necessary
+#XML syntax for each trial
 create_trials <- function (condition, timePressure, trafficLoad, nTrials){
   TP <- timePressure*1000
   nPairs <- trafficLoad*nTrials
@@ -43,6 +47,7 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
   trials
 }
 
+#capitalizes the first letter of a string
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),

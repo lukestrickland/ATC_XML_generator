@@ -14,7 +14,8 @@ create_exp_var_df <- function(nPairs, callsigns){
 #get as many callsigns as needed
   callsign_pool <- as.character(sample(callsigns, 2*nPairs, replace = FALSE))
  
-#sample for DOMS   
+#sample for DOMS - currently trials are quite easy
+#so that participants don't rely on automation - too easy?
   doms_lower <- runif(nPairs*0.5, 0, 1.5)
   doms_upper <- runif(nPairs*0.5, 8.5, 10)
   DOMS <- round(c(doms_lower, doms_upper), 1)
@@ -48,6 +49,13 @@ create_exp_var_df <- function(nPairs, callsigns){
 }
 
 
+#inputs: a df full of stimulus properties for the 
+#automated conditions, the number of total automation
+#failures
+#outputs: a data frame that contains presOrders
+#for randomly selected automation failures 
+#for conflicts and non-conflict trials
+
 get_auto_fails <- function (auto_exp_var_df, num_fails) {
   
   if (length(auto_exp_var_df$presOrder) %% 2 != 0) {
@@ -56,15 +64,25 @@ get_auto_fails <- function (auto_exp_var_df, num_fails) {
   
   fail_conflicts <- sample(auto_exp_var_df$presOrder[auto_exp_var_df$conflict_status ==
                                                        "conflict"],
-                           num_fails, replace = F)
+                           num_fails/2, replace = F)
   
   fail_nonconflicts <- sample(auto_exp_var_df$presOrder[auto_exp_var_df$conflict_status ==
                                                           "nonconflict"],
-                              num_fails, replace = F)
+                              num_fails/2, replace = F)
   
   tibble(fail_conflicts, fail_nonconflicts)
   
 }
+
+#inputs: the exp_var_df for the manual condition, the df 
+#for the automated condition, and a data frame containing
+#conflict and non-conflict failtrials
+
+#outputs: a different manual data frame of experimental variables.
+#a bunch of trials are matched to the automation failures from auto
+#condition. The rest of the trials are the same as they were 
+#but with a shuffled presentation order (to make sure they do not
+#conflict with presetnation order of matches to auto failures)
 
 add_matched_auto_fails_reshuffle <- function (manual_exp_var_df, 
                                               auto_exp_var_df,
@@ -76,22 +94,25 @@ add_matched_auto_fails_reshuffle <- function (manual_exp_var_df,
                            "stimulus", "failtrial")
  
   manual_exp_var_df$failtrial = FALSE
-  #replace numbers for as many manual conflicts as necessary  
+  #Replace first (num conflict fails) of manual trials with
+  #the auto fail trials and same for nonconflicts
   manual_exp_var_df[manual_exp_var_df$conflict_status=='conflict',
                     ][1:length(failtrials$fail_conflicts),
                       columns_to_replace] <-
     auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_conflicts,
                     columns_to_replace]
   
-  #replace numbers for as many manual nonconflicts as necessary  
   manual_exp_var_df[manual_exp_var_df$conflict_status=='nonconflict',
                     ][1:length(failtrials$fail_nonconflicts),
                       columns_to_replace] <-
     auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_nonconflicts,
                     columns_to_replace]
   
-  #randomly shuffle pres-order of all stimuli not matched to failures so that they don't
-  #conflict with the conflicting matches
+  #randomly shuffle pres-order of all stimuli not matched to failures, making 
+  #sure that they do not conflict with the presOrder of the manual trials
+  #matched to auto failures (which were matched to the auto failure presOrders
+  #in the step above)
+  
   all_possible_presOrders <- 1:length(manual_exp_var_df$presOrder) 
   nonfail_presOrders <- 
     all_possible_presOrders[!(
@@ -108,6 +129,13 @@ add_matched_auto_fails_reshuffle <- function (manual_exp_var_df,
 
 #Creates inputs for the sim
 #inputs: experimental variable df, aspect ratio, x dimension
+#outputs: a data frame containing all the x, y coordinates of the 
+#aircraft include x dim, y dim of the screen,
+# starting coordinates of the aircraft (cartesian),
+#starting coordinates of the aircraft (in pixels)
+#and ending coordinates (given bc atc sim requires although they
+#will never actually reach them)
+
 create_sim_input_df <- function(exp_var_df, aspectRatio, x_dim){
   #define consequential variables
   y_dim <- x_dim*aspectRatio
@@ -162,27 +190,9 @@ create_sim_input_df <- function(exp_var_df, aspectRatio, x_dim){
 
 }
 
-write_exp_data <- function(condition, exp_var_df, sim_input_df,
-                      maps_and_ac, p, session){
-  
-  write.csv(sim_input_df, paste('data/sim_inputs_', condition, '_p', 
-                                       p, '_', 's', 
-                                       session, '_', toupper(condition), 
-                                       '.csv', sep = ''))
-  
-  write.csv(exp_var_df, paste('data/exp_vars_', condition,'_p', 
-                                     p, '_', 's', 
-                                     session, '_', toupper(condition), 
-                                     '.csv', sep = ''))
-  
-  writeLines(maps_and_ac, paste('components/atc_09_maps_and_ac_p', 
-                                       p, '_', 's', 
-                                       session, '_', toupper(condition), 
-                                       '.txt', sep = ''), sep = '\n\n')
-  
-}
 
-
+#Inputs:experimental variables df, sim inputs df, condition
+#Outputs: an array of strings with xml maps and xml ac
 create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   ##assign variables from exp_var_df
   ac1_fl <- exp_var_df$ac1_fl
@@ -294,3 +304,34 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   }
   cbind(xml_maps, xml_ac)
 }
+
+
+
+#inputs:condition, df of experimental variables, df of
+#sim input variables string, array of maps and aircraft
+#for each pair
+
+#writes the data frames to dfs and the maps and ac to 
+#a text file
+
+write_exp_data <- function(condition, exp_var_df, sim_input_df,
+                           maps_and_ac, p, session){
+  
+  write.csv(sim_input_df, paste('data/sim_inputs', 
+                                p, '_', 's', 
+                                session, '_', toupper(condition), 
+                                '.csv', sep = ''))
+  
+  write.csv(exp_var_df, paste('data/exp_vars', '_p', 
+                              p, '_', 's', 
+                              session, '_', toupper(condition), 
+                              '.csv', sep = ''))
+  
+  writeLines(maps_and_ac, paste('components/atc_09_maps_and_ac_p', 
+                                p, '_', 's', 
+                                session, '_', toupper(condition), 
+                                '.txt', sep = ''), sep = '\n\n')
+  
+}
+
+
