@@ -2,9 +2,7 @@ library(tidyverse)
 source("R/0-ac_map_generation_functions.R")
 callsigns <- read.csv('components/callsigns.csv', header = TRUE, sep = ",")$CS
 
-###############################################################################
-############################################ Enter experimental variables #####
-###############################################################################
+# Enter experimental variables
 n_participants <- 32
 conds <- factor(c("AUTO", "MANUAL"))
 sessions <- 2
@@ -35,9 +33,9 @@ for (p in participant_number){
    
      #pick the manual trials with presOrder matching the auto failures
     manual_exp_var_df <- add_matched_auto_fails_reshuffle(
-                                manual_exp_var_df,
-                                auto_exp_var_df,
-                                failtrials)
+                                manual_exp_var_df= manual_exp_var_df,
+                                auto_exp_var_df= auto_exp_var_df,
+                                failtrials = failtrials)
 
     ##for all auto trials ship matching rows to manual except for stimulus
 
@@ -47,30 +45,37 @@ for (p in participant_number){
     manual_sim_input_df <- create_sim_input_df(exp_var_df =  manual_exp_var_df,
                                              aspectRatio = 0.625, x_dim=180)
 
-    
     auto_maps_and_ac <- create_xml_ac_and_maps(
-                        "auto", auto_exp_var_df, auto_sim_input_df)
+                          condition= "auto", exp_var_df= auto_exp_var_df, 
+                          sim_input_df= auto_sim_input_df)
     
     manual_maps_and_ac <- create_xml_ac_and_maps(
-                        "manual", manual_exp_var_df, manual_sim_input_df)
+                           condition= "manual", exp_var_df = manual_exp_var_df, 
+                           sim_input_df = manual_sim_input_df)
     #writes exp var df to csv, sim input to csv, maps and ac to txt files
-    write_exp_data('manual', manual_exp_var_df, manual_sim_input_df,
-              manual_maps_and_ac, p, session)
+    write_exp_data(condition= 'manual', exp_var_df= manual_exp_var_df, 
+                   sim_input_df= manual_sim_input_df,
+                   maps_and_ac = manual_maps_and_ac, p=p, 
+                   session = session)
     
-    write_exp_data('auto', auto_exp_var_df, auto_sim_input_df,
-              auto_maps_and_ac, p, session)
+    write_exp_data(condition= 'auto', exp_var_df= auto_exp_var_df, 
+                   sim_input_df = auto_sim_input_df, 
+                   maps_and_ac = auto_maps_and_ac, p=p, 
+                   session = session)
   }
   cat(paste("p", p, " ", sep=""))
 }
 
-#Create training
+#Create one training set for everybody
 
 training_exp_var_df <- create_exp_var_df(nPairs=40, callsigns=callsigns)
 training_sim_input_df <- create_sim_input_df(exp_var_df = training_exp_var_df,
                                          aspectRatio = 0.625, x_dim=180)
 training_maps_and_ac <- create_xml_ac_and_maps(
-  "training", training_exp_var_df, training_sim_input_df)
+                         condition= "training", exp_var_df = training_exp_var_df, 
+                         sim_input_df = training_sim_input_df)
 
-write_exp_data('training', training_exp_var_df, training_sim_input_df,
-               training_maps_and_ac, p = "_ALL", session=0)
+write_exp_data(condition= 'training', exp_var_df = training_exp_var_df, 
+               sim_input_df = training_sim_input_df, 
+               maps_and_ac = training_maps_and_ac, p = "_ALL", session=0)
 

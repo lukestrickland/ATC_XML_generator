@@ -1,12 +1,7 @@
-###############################################################################
-############################################ Trials Generator for ATC-LAB #####
-###############################################################################
+#generates csv with all trial procedures
 source("R/0-trials_generator_functions.R")
-###############################################################################
-############################################ Enter experimental variables #####
-###############################################################################
-conds <- c("MANUAL", "AUTO")
 
+conds <- c("MANUAL", "AUTO")
 nTrials=600
 
 #to paste a block break in at the appropriate place
@@ -14,10 +9,12 @@ block_break <- "\n <atc:phase atc:idx='displayblockBreak'>
 \t<atc:instruction atc:idxref='blockBreak'/>
 </atc:phase>\n\n"
 
+#which trial should the break be after
 break_trials <- 300
 
 for (cond in conds) {
-  trials <- create_trials(cond, 8, 1, nTrials)
+  trials <- create_trials(condition=cond, timePressure= 8, 
+                          trafficLoad =1, nTrials= nTrials)
   trials[break_trials, 3] <-
     paste(trials[break_trials, 3], block_break)
   write.csv(trials,
@@ -26,9 +23,10 @@ for (cond in conds) {
             row.names = FALSE)
 }
 
-#Read in training exp_vars
+#Read in training exp_vars (which have conflict status of each trial)
 #create training feedback using training exp_vars
-training_trials <- create_trials('TRAINING', 8, 1, 40)
+training_trials <- create_trials(condition= 'TRAINING', timePressure=8,
+                                 trafficLoad =1, nTrials= 40)
 training_data <- read.csv("data/exp_vars_p_ALL_s0_TRAINING.csv")
 conflict_status <-
   as.character(training_data$conflict_status[order(training_data$presOrder)])

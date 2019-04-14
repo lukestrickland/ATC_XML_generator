@@ -75,24 +75,35 @@ for (ppt in participant_number){
       blk2 <- cond[[counterbalance]][4]
     }
     
-    xml_script_blk1 <- create_xml_script(ppt, blk1, sess, preamble, instructions_key,
-                                         instructions_gen,
-                                         mapaircraft_preamble, 
-                                         display_parameters, scoring,
-                                         response_key_set, clock_position, 
-                                         display_general_instructions, 
-                                         begin_block_message, post)
+    xml_script_blk1 <- create_xml_script(ppt= ppt, cond = blk1, sess = sess, 
+                                         preamble= preamble, 
+                                         instructions_key = instructions_key,
+                                         instructions_gen = instructions_gen,
+                                         mapaircraft_preamble = mapaircraft_preamble, 
+                                         display_parameters = display_parameters, 
+                                         scoring = scoring,
+                                         response_key_set = response_key_set, 
+                                         clock_position = clock_position, 
+                                         display_general_instructions = display_general_instructions, 
+                                         begin_block_message = begin_block_message, 
+                                         post=post)
     
     
     writeLines(xml_script_blk1, paste('XML/ppt', ppt,'_sess', sess,
                                       '_block1_cond_', blk1, '.xml', sep = ''), sep = '\n\n')
     
-    xml_script_blk2 <- create_xml_script(ppt, blk2, sess, preamble,instructions_key,
-                                         instructions_gen, mapaircraft_preamble, 
-                                         display_parameters, scoring,
-                                         response_key_set, clock_position, 
-                                         display_general_instructions, 
-                                         begin_block_message, post)
+    xml_script_blk2 <- create_xml_script(ppt=ppt, cond = blk2, sess = sess, 
+                                         preamble = preamble,
+                                         instructions_key = instructions_key,
+                                         instructions_gen = instructions_gen, 
+                                         mapaircraft_preamble = mapaircraft_preamble, 
+                                         display_parameters = display_parameters, 
+                                         scoring = scoring,
+                                         response_key_set = response_key_set, 
+                                         clock_position = clock_position, 
+                                         display_general_instructions = display_general_instructions, 
+                                         begin_block_message = begin_block_message, 
+                                         post = post)
     
     writeLines(xml_script_blk2, paste('XML/ppt', ppt,'_sess', sess,
                                       '_block2_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
