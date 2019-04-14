@@ -317,7 +317,7 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
 write_exp_data <- function(condition, exp_var_df, sim_input_df,
                            maps_and_ac, p, session){
   
-  write.csv(sim_input_df, paste('data/sim_inputs', 
+  write.csv(sim_input_df, paste('data/sim_inputs_p', 
                                 p, '_', 's', 
                                 session, '_', toupper(condition), 
                                 '.csv', sep = ''))

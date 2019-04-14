@@ -99,6 +99,7 @@ for (ppt in participant_number){
   }
   
   instructions <- paste(instructions_train, '\n\n', instructions_key, '\n\n',
+                        instructions_gen, '\n\n',
                         conflict_feedback )
   
   training_XML<- paste(preamble, instructions,
@@ -109,7 +110,7 @@ for (ppt in participant_number){
                        training_trials, post)
   
   
-  writeLines(training_XML, paste("XML/training_p", ppt, ".xml", sep=""), sep = '\n\n')
+  writeLines(training_XML, paste("XML/ppt", ppt, "_training", ".xml", sep=""), sep = '\n\n')
   
   cat(ppt)
 }
