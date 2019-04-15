@@ -32,22 +32,24 @@
 		<center>
 		    <table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
+				<p align="center"><font face="calibri" size="8">In the upcoming block of trials, you will be required to decide whether pairs of 
+				aircraft will reach conflict at any point during their flight.</font></p>
+				<p align="center"><font face="calibri" size="8">In this block you will be provided with an automated decision aid. The decision aid recommends a 
+				classification (conflict or non-conflict) for each aircraft pair.</font></p>
+				<p align="center"><font face="calibri" size="8">The automated recommendation for each aircraft pair is presented at the bottom of the data blocks of both aircraft. 
+				CONFLICT means that the automation is recommending classifying this pair as a conflict. NON-CONF means that the 
+				automation is recommending classifying this pair as a non-conflict.</font></p></font></p>
 			
-				<p align="center"><font face="calibri" size="8">In this block you will be provided with a decision aid. Based on an algorithm,
-				the decision aid recommends a classification (conflict or nonconflict) for each aircraft pair. </font></p>
-				<p align="center"><font face="calibri" size="8">Your decision aid for each trial is presented in the data blocks of both aircraft. If it says 'conflict', 
-				it recommends classifying the aircraft pair as in conflict. If it says 'nonconflict', 
-				it recommends classifying the aircraft pair as not in conflict.</font></p></font></p>
-			
-				<p align="center"><font face="calibri" size="8"><b>Please note that your decision aid may fail</b>. Ultimately, it is YOUR responsibility to determine 
-				the conflict status of the aircraft pairs.</font></p></font></p>
+				<p align="center"><font face="calibri" size="8"><b>Although the automated decision aid is reliable, it is not perfect. 
+				In the event that the automated decision aid recommends an incorrect classification, it is essential that you chose the 
+				correct classification instead.</font></p></font></p>
 				
-				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>n</b> to continue.</font></p>
 				
 		    </font></td></tr>
 	    	</table>
 		</center>
 		</qt>]]>
 		</atc:text>
-		<atc:keyEvent>Space</atc:keyEvent>
+		<atc:keyEvent>n</atc:keyEvent>
 	</atc:instruction>

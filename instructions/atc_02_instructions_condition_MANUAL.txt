@@ -31,17 +31,19 @@
 		<atc:text>
 		<![CDATA[<qt>
 		<center>
-		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="8"><b>TRAFFIC LEVEL: 2 PAIRS</b></font></p>
-				
-				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
+				<p align="center"><font face="calibri" size="8">In the upcoming block of trials, you will be required to decide whether pairs of 
+				aircraft will reach conflict at any point during their flight.</font></p>
+				<p align="center"><font face="calibri" size="8">In this block, there is no special information displayed at the bottom of the data blocks of the aircraft. 
+				There is simply a string '######', which you should ignore. </font></p></font></p>
+				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>n</b> to continue.</font></p>
 				
 		    </font></td></tr>
 	    	</table>
 		</center>
 		</qt>]]>
 		</atc:text>
-		<atc:keyEvent>Space</atc:keyEvent>
+		<atc:keyEvent>n</atc:keyEvent>
 	</atc:instruction>

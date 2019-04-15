@@ -35,7 +35,7 @@
 			
 				<p align="center"><font face="calibri" size="8">You will now complete a training block to familiarize you with the task. </font></p>
 				<p align="center"><font face="calibri" size="8">Your task is to determine whether aircraft pairs will, at any point in their flight, 
-					reach conflict. As this is the training block, you will be informed after each trial whether the aircraft would reach conflict or not.
+					reach conflict. As this is the training block, you will be informed after each trial whether the aircraft pairs would have reached conflict or not.
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				
 		    </font></td></tr>
