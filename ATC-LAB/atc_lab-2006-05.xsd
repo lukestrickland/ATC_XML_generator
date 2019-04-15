@@ -1,0 +1,1545 @@
+<?xml version='1.0'?>
+
+<xs:schema 
+      xmlns:xs='http://www.w3.org/2001/XMLSchema' 
+      targetNamespace='http://www.humanfactors.uq.edu.au/atc/2006/atc-ns'
+      xmlns:atc='http://www.humanfactors.uq.edu.au/atc/2006/atc-ns'
+      attributeFormDefault='qualified'
+      elementFormDefault='qualified'
+  >
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Documentation
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:annotation>
+    <xs:documentation>
+      <![CDATA[
+      @project  : ATC-Lab
+
+      @file     : $RCSfile: atc_lab-2006-05.xsd,v $
+      @author   : $Author: Aaron Yeung $
+      @version  : $Name:  $ ( $Revision: 1.11 $ )
+      @date     : $Date: 2010/12/08 09:01:26 $
+      @state    : $State: Exp $
+
+      $Log: atc_lab-2006-05.xsd,v $
+      Revision 1.11  2010/12/08 09:01:26  Aaron Yeung
+      Modified aircraftDeclaration element to include position attributes (x,y)
+
+      Revision 1.10  2010/10/27 14:18:16  Aaron Yeung
+      Added scriptable aircraft declaration dialog box functionality
+
+      Revision 1.9  2010/05/18 14:49:13  Aaron Yeung
+      Added trial task type (normal or practice)
+
+      Revision 1.8  2010/02/22 03:14:44  Aaron Yeung
+      Fixed scoring for events that have already occurred
+      Fixed automatic aircraft acceptance upon initialisation
+      Reset correct and incorrect decision global variables between trials
+
+      Revision 1.7  2010/02/11 15:10:41  Aaron Yeung
+      Added a score feedback task which can use the values of specified global variables in its display
+
+      Revision 1.6  2010/02/09 15:28:29  Aaron Yeung
+      Added CorrectDecisionsDisplay and IncorrectDecisionsDisplay in canvas_infoblock which allows onscreen displays that dynamically displays a participants correct and incorrect decisions.
+
+      Also updated the onscreen goal display so that an experimenter can specify the label, link to a global variable that is to be displayed and any text in the feedback box
+
+      Revision 1.5  2010/02/04 14:25:53  Aaron Yeung
+      Added ability to script the size of buttons in choice_question UI components. Created a goal_level choice_question in the 269.xml script
+
+      Revision 1.4  2010/02/04 11:11:16  Aaron Yeung
+      Added functionality to allow experimenter to script the actions of a conflict declaration which includes:
+      a) Change speed
+      b) Change level
+      c) Enable audio feedback
+      d) Enable score feedback
+
+      Revision 1.3  2010/02/02 14:51:58  Aaron Yeung
+      Added functionality to delay the audio/score feedback
+
+      Revision 1.2  2010/02/01 14:25:42  Aaron Yeung
+      See "Release Notes.txt"
+
+      Revision 1.1.1.1  2010/01/23 01:42:30  Aaron Yeung
+      no message
+
+      Revision 1.4  2009/08/29 04:08:04  Aaron Yeung
+      no message
+
+      Revision 1.3  2009/08/26 11:02:47  Aaron Yeung
+      Implemented user-choosable feedback type
+      Implemented user-choosable goal type
+      Implemented display of self referent and normative goals onscreen
+      Updated associated data logging
+
+      Revision 1.2  2009/08/20 13:03:07  Aaron Yeung
+      Implemented self referent and normative feedback screens with calculation of percentages
+
+      Revision 1.1  2009/08/18 12:00:51  Aaron Yeung
+      Got initial Self Referent feedback screen up. Can:
+      - set text
+      - set label for feedback score
+      - click OK button to close
+
+
+      @copyright  : 2006 ARC Key Center for 
+                    Human Factors & Applied Cognitive Psycology
+      ]]>
+    </xs:documentation>
+  </xs:annotation>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Top level document container element
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='experiment'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:global' minOccurs='0'  />
+        <xs:element ref='atc:globalRef' minOccurs='0'  />
+        <xs:element ref='atc:config'                />
+        <xs:element ref='atc:data'                  />
+        <xs:element ref='atc:presentation'          />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID'  />
+    </xs:complexType>
+  </xs:element>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        <atc:global>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+    <xs:element name='global'>
+        <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='unbounded'>
+                <xs:element ref='atc:variable' />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name='variable'>
+        <xs:complexType>
+            <xs:attribute name='name' use='required' type='xs:ID'            />
+            <xs:attribute name='type' use='required' type='atc:variableType' />
+            <xs:attribute name='init' use='optional' type='xs:int'           />
+            <xs:attribute name='value' use='optional' type='xs:int'           />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name='variableType'>
+        <xs:restriction base='xs:NCName'>
+            <xs:enumeration value='int'     />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name='globalRef'>
+        <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='unbounded'>
+                <xs:element ref='atc:refArray' />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name='refArray'>
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name='record' type='atc:recordDef'   minOccurs='0' maxOccurs='unbounded'/>
+            </xs:choice>
+            <xs:attribute name='name' use='required' type='xs:ID'            />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name='recordDef'>
+        <xs:simpleContent>
+            <xs:extension base='xs:string'>
+                <xs:attribute name='row'    use='optional'  type='xs:int'/>
+                <xs:attribute name='min'    use='optional'  type='xs:float'/>
+                <xs:attribute name='max'    use='optional'  type='xs:float'/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        <atc:config> type definition
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='config'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:biopac'         minOccurs='0' />
+        <xs:element ref='atc:units' />
+        <xs:element ref='atc:aircraftParams' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:instruction'    minOccurs='0' maxOccurs='unbounded' />
+        <xs:group   ref='atc:ui_component'   minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:input'          minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:display'        minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='scoreFeedback'     minOccurs='0' maxOccurs='unbounded' type='atc:scoreFeedbackDef'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='biopac' />
+
+  <xs:element name='units'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='input' type='xs:token'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Reusable Top Level UI elements
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <!-- 
+        ~~~~~  top level UI components  ~~~~~
+  -->
+    
+  <xs:group name='ui_component'>
+    <xs:choice>
+      <xs:element name='hbox'               type='atc:boxDef'/>
+      <xs:element name='vbox'               type='atc:boxDef'/>
+      <xs:element name='choice_question'    type='atc:choiceQuestionDef' />
+      <xs:element name='scale_question'     type='atc:scaleQuestionDef' />
+      <xs:element name='multi_question'     type='atc:multiQuestionDef' />
+      <xs:element name='validated_question' type='atc:validatedQuestionDef'/>
+    </xs:choice>
+  </xs:group>
+  
+  <!-- 
+        ~~~~~  hbox/vbox definition  ~~~~~
+  -->
+
+  <xs:complexType name='boxDef'>
+    <xs:group ref='atc:ui_widget' minOccurs='0' maxOccurs='unbounded' />
+    <xs:attribute name='id' type='xs:ID' />
+  </xs:complexType>
+
+  <!-- 
+        ~~~~~  scaled question definitions  ~~~~~
+  -->
+
+  <xs:simpleType name='ConditionalTextCondition'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='lessThan'            />
+      <xs:enumeration value='lessThanOrEqualTo'   />
+      <xs:enumeration value='greaterThan'         />
+      <xs:enumeration value='greaterThanOrEqualTo'/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='GlobalVariablesFormula'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='plus'      />
+      <xs:enumeration value='minus'     />
+      <xs:enumeration value='multiply'  />
+      <xs:enumeration value='divide'    />
+      <xs:enumeration value='absoluteDifference'    />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='textQuestionDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='x' type='xs:int' />
+        <xs:attribute name='y' type='xs:int' />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name='baseQuestionDef'>
+    <xs:sequence>
+      <xs:element name='text' type='atc:textQuestionDef' maxOccurs='unbounded'/>
+      <xs:element name='label' minOccurs='0' maxOccurs='unbounded' type='xs:string' />
+    </xs:sequence>
+    <xs:attributeGroup ref='atc:uniqueID' />
+  </xs:complexType>
+
+  <xs:complexType name='choiceQuestionDef'>
+    <xs:complexContent>
+      <xs:extension base='atc:baseQuestionDef'>
+        <xs:sequence>
+          <xs:element name='choice' maxOccurs='unbounded' type='atc:choiceItemDef' />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name='choiceItemDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='value'  type='xs:int' />
+        <xs:attribute name='key'    type='xs:string' />
+        <xs:attribute name='idxref' type='xs:string' />
+        <xs:attribute name='x' type='xs:int' />
+        <xs:attribute name='y' type='xs:int' />
+        <xs:attribute name='w' type='xs:int' />
+        <xs:attribute name='h' type='xs:int' />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name='scaleQuestionDef'>
+    <xs:complexContent>
+      <xs:extension base='atc:baseQuestionDef'>
+        <xs:sequence>
+          <xs:element name='scale' type='atc:integerScaleDef' />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name='multiQuestionDef'>
+    <xs:complexContent>
+      <xs:extension base='atc:scaleQuestionDef'>
+        <xs:sequence>
+          <xs:element name='question' minOccurs='2' maxOccurs='unbounded' type='xs:string' />
+          <xs:element name='number' minOccurs='0' />
+          <xs:element name='answer_all' minOccurs='0' />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name='scoreFeedbackDef'>
+    <xs:choice minOccurs='0' maxOccurs='unbounded'>
+      <xs:element name='goal'                       minOccurs='0' maxOccurs='unbounded' type='atc:feedbackGoalInfoDef'/>  <!-- Displays reminder about what goal was set -->
+      <xs:element name='performance'                minOccurs='0' maxOccurs='unbounded' type='atc:performanceInfoDef' />  <!-- Displays feedback sign and goal attainment text -->
+      <xs:element name='text'                       minOccurs='0' maxOccurs='unbounded' type='xs:string'              />  <!-- General text -->
+      <xs:element name='feedback'                   minOccurs='0' maxOccurs='unbounded' type='atc:feedbackDef'        />  <!-- Displays the difference between current score and self-referent/norm score-->
+      <xs:element name='conditionalText'            minOccurs='0' maxOccurs='unbounded' type='atc:conditionalTextDef' />  <!-- Displays text based on comparison between the difference between current score and previous score/normative score and the set value -->
+      <xs:element name='conditionalTextWithGlobals' minOccurs='0' maxOccurs='unbounded' type='atc:conditionalTextWithGlobalsDef' /> <!-- Displays text based on comparison between two global variables -->
+      <xs:element name='condGlobalRef'              minOccurs='0' maxOccurs='unbounded' type='atc:condGlobalRefDef'   />
+      <xs:element name='global_ref'                 minOccurs='0' maxOccurs='unbounded' type='xs:string'              />  <!-- Replace %d with a global variable's value -->
+      <xs:element name='globalArrayRef'             minOccurs='0' maxOccurs='unbounded' type='atc:globalArrayRefDef'  />
+      <xs:element name='fileValueRef'               minOccurs='0' maxOccurs='unbounded' type='atc:fileValueRefDef'    />
+      <xs:element ref='atc:font'                    minOccurs='0' />
+    </xs:choice>
+    <xs:attributeGroup ref='atc:uniqueID' />
+    <xs:attribute name='type' use='required' type='atc:feedbackType' />
+    <xs:attribute name='type2' use='optional' type='atc:feedbackType' />
+  </xs:complexType>
+
+  <xs:complexType name='feedbackDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='type'       type='atc:scoreFeedbackType'/>
+        <xs:attribute name='min'        type='xs:integer'/>
+        <xs:attribute name='max'        type='xs:integer'/>
+        <xs:attribute name='increment'  type='xs:integer'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:simpleType name='scoreFeedbackType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='calculated'  />
+      <xs:enumeration value='manipulated'  />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='feedbackGoalInfoDef'>
+    <xs:choice minOccurs='0' maxOccurs='unbounded'>
+      <xs:element name='text' minOccurs='0' maxOccurs='unbounded' type='xs:string'/>
+      <xs:element ref='atc:link' minOccurs='0' maxOccurs='unbounded'/>
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name='performanceInfoDef'>
+    <xs:choice minOccurs='0' maxOccurs='unbounded'>
+      <xs:element name='feedbackSign' minOccurs='0' maxOccurs='unbounded' type='atc:performanceResultDef' />
+      <xs:element name='goalAttainment' minOccurs='0' maxOccurs='unbounded' type='atc:performanceResultDef' />
+    </xs:choice>
+    <xs:attribute name='fb_ga_match_join_word'    use='required' type='xs:string' />
+    <xs:attribute name='fb_ga_mismatch_join_word' use='required' type='xs:string' />
+  </xs:complexType>
+
+  <xs:complexType name='performanceResultDef'>
+    <xs:choice minOccurs='0' maxOccurs='unbounded'>
+      <xs:element name='positive' minOccurs='0' maxOccurs='unbounded' type='xs:string' />
+      <xs:element name='negative' minOccurs='0' maxOccurs='unbounded' type='xs:string' />
+      <xs:element name='manipulated' minOccurs='0' maxOccurs='unbounded' type='atc:manipulatedFeedbackDef' />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name='manipulatedFeedbackDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='resultType'  type='atc:resultTypeEnum'/>
+        <xs:attribute name='resultLevel'  type='atc:resultLevelEnum'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:simpleType name='resultTypeEnum'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='positive'  />
+      <xs:enumeration value='negative'  />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='resultLevelEnum'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='low'  />
+      <xs:enumeration value='medium'  />
+      <xs:enumeration value='high'  />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='conditionalTextDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='condition'  type='atc:ConditionalTextCondition'/>
+        <xs:attribute name='value'      type='xs:integer'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name='conditionalTextWithGlobalsDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='condition'    type='atc:ConditionalTextCondition'/>
+        <xs:attribute name='idxref1'      type='xs:string'/>
+        <xs:attribute name='idxref2'      type='xs:string'/>
+        <xs:attribute name='result_name'  type='xs:string'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name='condGlobalRefDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='formula'  type='atc:GlobalVariablesFormula'/>
+        <xs:attribute name='idxref1'    type='xs:string'/>
+        <xs:attribute name='idxref2'    type='xs:string'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name='integerScaleDef'>
+    <xs:attribute name='min' type='xs:integer' />
+    <xs:attribute name='max' type='xs:integer' />
+  </xs:complexType>
+
+  <xs:complexType name='globalArrayRefDef'>
+      <xs:attribute name='idx'      type='xs:string'                            />
+      <xs:attribute name='rowRef'   type='xs:string'                            />
+      <xs:attribute name='applyTo'  type='atc:applyToTextType' use='optional'   />
+  </xs:complexType>
+
+  <xs:simpleType name='applyToTextType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='text'              />
+      <xs:enumeration value='conditionalText'   />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='fileValueRefDef'>
+      <xs:attribute name='file'             type='xs:string'                />
+      <xs:attribute name='delimiter'        type='xs:string'                />
+      <xs:attribute name='type'             type='atc:fileValueType'        />
+      <xs:attribute name='rowOrColumnRef'   type='xs:int'                   />
+      <xs:attribute name='filePos1'         type='xs:int'   use='optional'  />
+      <xs:attribute name='filePos2'         type='xs:int'   use='optional'  />
+      <xs:attribute name='global_ref'       type='xs:string'   use='optional'  />
+  </xs:complexType>
+
+  <xs:simpleType name='fileValueType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='singleValue'       />
+      <xs:enumeration value='rowSummation'      />
+      <xs:enumeration value='columnSummation'   />
+      <xs:enumeration value='rowAverage'        />
+      <xs:enumeration value='columnAverage'     />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='validatedQuestionDef'>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='text' type='xs:string' />
+        <xs:element ref='atc:int_validator' />
+        <xs:element ref='atc:link' minOccurs='0' maxOccurs='unbounded' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attribute name='type' use='optional' type='atc:validationQuestionType' />
+  </xs:complexType>
+
+  <xs:element name='int_validator' >
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='text' type='xs:string' />
+      </xs:sequence>
+      <xs:attribute name='min' type='xs:int' />
+      <xs:attribute name='max' type='xs:int' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='link'>
+    <xs:complexType>
+      <xs:attribute name='global' use='required' type='xs:IDREF' />
+    </xs:complexType>
+  </xs:element>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Reusable UI elements
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <!-- 
+        ~~~~~  widget definition  ~~~~~
+  -->
+
+  <xs:group name='ui_widget'>
+    <xs:choice>
+      <xs:element ref='atc:label'      />
+      <xs:element ref='atc:pushbutton' />
+      <xs:element ref='atc:space'      />
+      <xs:element ref='atc:stretch'    />
+      <xs:element ref='atc:textbox'    />
+      <xs:group ref='atc:ui_component' />
+      <xs:element ref='atc:ui_component' />
+    </xs:choice>
+  </xs:group>
+    
+  <xs:element name='ui_component'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:reference' />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- 
+        ~~~~~  label definition  ~~~~~
+
+        ~~ * currently only allow text to be defined in 'text' attribute
+        ~~ * TODO: extend to allow simple content to define text
+        ~~ * TODO: also need longer labels that have line breaks (automatic?)
+  -->
+
+  <xs:element name='label'>
+    <xs:complexType>
+      <xs:attribute name='text' type='xs:string' />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- 
+        ~~~~~  pushbutton widget definitions  ~~~~~
+  -->
+
+  <xs:element name='pushbutton'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attribute name='text' type='xs:string' />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- 
+        ~~~~~  spacing component definitions  ~~~~~
+  -->
+
+  <xs:element name='space'>
+    <xs:complexType>
+      <xs:attribute name='size' default='20' type='xs:int' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='stretch' />
+
+  <!-- 
+        ~~~~~  textbox widget  ~~~~~
+  -->
+
+  <xs:element name='textbox'>
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref='atc:int_validator' minOccurs='0' maxOccurs='1' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- 
+        ~~~~~  textbox widget validators  ~~~~~
+  -->
+
+  <!--  ~~~ integer ~~~
+  <xs:element name='int_validator'>
+    <xs:complexType>
+      <xs:attribute name='minimum' use='required' type='xs:int' />
+      <xs:attribute name='maximum' use='required' type='xs:int' />
+    </xs:complexType>
+  </xs:element>
+ -->
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Input Screen Definitions
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='input'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:font'          minOccurs='0' />
+        <xs:element ref='atc:ui_component'  minOccurs='0' />
+        <xs:element ref='atc:connection'    minOccurs='0' maxOccurs='unbounded' />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attribute name='type' use='optional' type='atc:validationQuestionType' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='display'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='text'         minOccurs='0' maxOccurs='unbounded' type='xs:string' />
+        <xs:element ref='atc:link'      minOccurs='0' maxOccurs='unbounded'                  />
+        <xs:element ref='atc:countdown' minOccurs='0' maxOccurs='unbounded'                  />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='countdown'>
+    <xs:complexType>
+      <xs:attribute name='time' use='required' type='xs:long' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='dialog'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:font' minOccurs='0' />
+        <xs:element name='caption' type='xs:string' />
+        <xs:element ref='atc:ui_component'               maxOccurs='unbounded' />
+        <xs:element ref='atc:connection'   minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:timer'        minOccurs='0'                       />
+        <xs:element ref='atc:pause'        minOccurs='0'                       />
+        <xs:element ref='atc:locate'        minOccurs='0'                       />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='font'>
+    <xs:complexType>
+      <xs:attribute name='family' default='sans-serif' type='xs:string' />
+      <xs:attribute name='pointSize' default='14' type='xs:int' />
+      <xs:attribute name='weight' default='50' type='xs:int' />
+      <xs:attribute name='italic' default='false' type='xs:boolean' />
+    </xs:complexType>
+  </xs:element>
+
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  <atc:aircraftParam> type definition              +++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+  
+  <xs:element name='aircraftParams'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='speed' minOccurs='0' type='xs:decimal'/>
+        <xs:element name='level' minOccurs='0' type='xs:decimal'/>
+        <xs:element name='RoC' minOccurs='0' maxOccurs='unbounded'>
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base='xs:decimal'>
+                <xs:attribute name='minLevel' default='0' type='xs:decimal'/>
+                <xs:attribute name='maxLevel' default='0' type='xs:decimal'/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  <atc:instruction> type definition                +++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:element name='instruction'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:font' minOccurs='0' />
+        <xs:element name='text'                                         type='xs:string' />
+        <xs:element name='keyEvent' minOccurs='0' maxOccurs='unbounded' type='xs:token'  />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+  
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:data
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='data'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:param' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:map'                 maxOccurs='unbounded' />
+        <xs:element ref='atc:sky'   minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:ui'    minOccurs='0' maxOccurs='unbounded' />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:param
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='param'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='aircraft_acceptance' minOccurs='0' maxOccurs='1' type='atc:aircraftAcceptanceType'    />
+        <xs:element name='aircraft_handoff'    minOccurs='0' maxOccurs='1' type='atc:aircraftHandoffType'       />
+        <xs:element ref='atc:conflictDeclarationActions' minOccurs='0' maxOccurs='1' /> 
+        <xs:element name='update_rate'       minOccurs='0' maxOccurs='1' type='xs:unsignedInt'/>
+<!--    <xs:element name='update_multiplier' minOccurs='0' maxOccurs='1' type='xs:unsignedInt'/>  -->
+        <xs:element name='scenario_tester'   minOccurs='0' maxOccurs='1' type='xs:float'/>
+
+        <xs:element name='horizontal_doms'   minOccurs='0' maxOccurs='1' type='xs:decimal'/>
+        <xs:element name='vertical_doms'     minOccurs='0' maxOccurs='1' type='xs:decimal'/>
+
+        <xs:element ref='atc:colours'             />
+        <xs:element ref='atc:info_block'          />
+        <xs:element ref='atc:select_tools'        />
+        <xs:element ref='atc:keyed_tools'         />
+        <xs:element ref='atc:initial_tools'       />
+        <xs:element ref='atc:scoring'             />
+        <xs:element ref='atc:aircraftDeclaration' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='aircraftAcceptanceType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='manual'    />
+      <xs:enumeration value='automatic' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='aircraftHandoffType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='manual'    />
+      <xs:enumeration value='automatic' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='conflictDeclarationActions'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='conflict_key'     minOccurs='0' type='xs:string'/>
+        <xs:element name='non_conflict_key' minOccurs='0' type='xs:string'/>
+        <xs:element name='other_key'        minOccurs='0' type='xs:string'/>
+      </xs:sequence>
+      <xs:attribute name='level_change'   use='optional' default='true'   type='xs:boolean' />
+      <xs:attribute name='speed_change'   use='optional' default='false'  type='xs:boolean' />
+      <xs:attribute name='audio_feedback' use='optional' default='true'   type='xs:boolean' />
+      <xs:attribute name='audio_beep'     use='optional' default='true'   type='xs:boolean' />
+      <xs:attribute name='score_change'   use='optional' default='true'   type='xs:boolean' />
+      <xs:attribute name='end_trial'      use='optional' default='false'  type='xs:boolean' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='colours'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='conflict_colour'    type='atc:colourType' />
+        <xs:element name='cs_none_colour'     type='atc:colourType' />
+        <xs:element name='cs_annonced_colour' type='atc:colourType' />
+        <xs:element name='cs_accepted_colour' type='atc:colourType' />
+        <xs:element name='cs_handoff_colour'  type='atc:colourType' />
+        <xs:element name='cs_nomore_colour'   type='atc:colourType' />
+        <xs:element name='cs_overout_colour'  type='atc:colourType' />
+        <xs:element name='cs_proposed_colour' type='atc:colourType' />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='colourType'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='blink' use='optional' default='false' type='xs:boolean' />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:element name='info_block'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='time'     type='atc:timeDisplay'  />
+        <xs:element name='goal'     type='atc:infoBlockGoalDef' />
+        <xs:element name='score'    type='atc:scoreDisplay'     />
+        <xs:element name='tool' />
+        <xs:element name='correct_decisions'    type='atc:genericInfoBlockDef'/>
+        <xs:element name='incorrect_decisions'  type='atc:genericInfoBlockDef'/>
+      </xs:choice>
+      <xs:attribute name='position' use='optional' default='BOTTOM' type='atc:gridPosition' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='timeDisplay'>
+    <xs:attribute name='type'    use='optional' type='atc:timeDisplayType'/>
+    <xs:attribute name='source'  use='optional' type='atc:timeDisplaySource'/>
+  </xs:complexType>
+
+  <xs:simpleType name='timeDisplayType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='countUp'   />
+      <xs:enumeration value='countDown' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='timeDisplaySource'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='trial'   />
+      <xs:enumeration value='blockTrial' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name='scoreDisplay'>
+    <xs:attribute name='label'    use='optional' type='xs:string'/>
+  </xs:complexType>
+
+  <xs:complexType name='genericInfoBlockDef'>
+    <xs:sequence>
+      <xs:element name='label'      type='xs:string' minOccurs='0' />
+      <xs:element name='global_ref' type='xs:string' minOccurs='0' />
+      <xs:element name='text'       type='xs:string' minOccurs='0' />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name='infoBlockGoalDef'>
+    <xs:sequence>
+      <xs:element ref='atc:font'                minOccurs='0' />
+      <xs:element name='label'      type='xs:string' minOccurs='0' />
+      <xs:element name='global_ref' type='xs:string' minOccurs='0' />
+      <xs:element name='text'       type='xs:string' minOccurs='0' />
+    </xs:sequence>
+    <xs:attribute name='type' use='optional' type='atc:goalType'/>
+  </xs:complexType>
+  
+  <xs:simpleType name='goalType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='generic'       />
+      <xs:enumeration value='trialGoal'       />
+      <xs:enumeration value='selfReferentGoal'/>
+      <xs:enumeration value='normativeGoal'   />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='validationQuestionType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='normal'        />
+      <xs:enumeration value='srGoal'    />
+      <xs:enumeration value='normGoal'  />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='feedbackType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='general'/>
+      <xs:enumeration value='selfReferent'/>
+      <xs:enumeration value='normative'   />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name='gridPosition'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='TOPLEFT'     />
+      <xs:enumeration value='TOP'         />
+      <xs:enumeration value='TOPRIGHT'    />
+      <xs:enumeration value='LEFT'        />
+      <xs:enumeration value='CENTER'      />
+      <xs:enumeration value='RIGHT'       />
+      <xs:enumeration value='BOTTOMLEFT'  />
+      <xs:enumeration value='BOTTOM'      />
+      <xs:enumeration value='BOTTOMRIGHT' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='select_tools'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element ref='atc:scale' /> 
+        <xs:element name='altitude' type='atc:altitude_tool_type'/> 
+        <xs:element name='airspeed' />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='conflictDeclarationButton'>
+    <xs:attribute name='name'   use='required' type='xs:string'                        />
+    <xs:attribute name='type'   use='required' type='atc:conflictDeclaratinButtonType' />
+    <xs:attribute name='label'  use='optional' default='Conflict' type='xs:string'                        />
+  </xs:complexType>
+
+  <xs:complexType name='conflictDeclarationText'>
+    <xs:attribute name='row'   use='optional' default='0' type='xs:integer' />
+    <xs:attribute name='value' use='optional' default=''  type='xs:string'  />
+  </xs:complexType>
+
+  <xs:simpleType name='conflictDeclaratinButtonType'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='conflict'    />
+      <xs:enumeration value='non-conflict'/>
+      <xs:enumeration value='cancel'      />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='scale'>
+    <xs:complexType>
+      <xs:attribute name='position' use='optional' default='TOPLEFT' type='atc:gridPosition' />
+      <xs:attribute name='fixed'    use='optional' default='false'   type='xs:boolean'       />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='altitude_tool_type'>
+    <xs:choice minOccurs='0' maxOccurs='1'>
+      <xs:element   ref='atc:aircraftDeclaration'/>
+    </xs:choice>
+    <xs:attribute name='x' use='optional' type='xs:int' />
+    <xs:attribute name='y' use='optional' type='xs:int' />
+  </xs:complexType>
+  
+  <xs:element name='aircraftDeclaration'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='text'   type='atc:conflictDeclarationText'    />
+        <xs:element name='button' type='atc:conflictDeclarationButton'  />
+        <xs:element name='newFlightLevelDelta'      type='xs:int'  />
+        <xs:element name='flightLevelChange'        type='atc:flightLevelChangeType' />
+      </xs:choice>
+      <xs:attribute name='type' use='required' type='atc:aircraftDeclarationType' />
+      <xs:attribute name='x'    use='optional' type='xs:int' />
+      <xs:attribute name='y'    use='optional' type='xs:int' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='aircraftDeclarationType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='manualChangeFL'    />
+      <xs:enumeration value='automaticChangeFL' />
+      <xs:enumeration value='declaration'       />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--<xs:element name='flightLevelChangeType'>-->
+          <xs:complexType name='flightLevelChangeType'>
+      <xs:attribute name='type' use='required' type='atc:flightLevelChangeTypeEnum' />
+      <xs:attribute name='min'  use='required' type='xs:float' />
+      <xs:attribute name='max'  use='required' type='xs:float' />
+    </xs:complexType>
+    <!--</xs:element>-->
+  
+  <xs:simpleType name='flightLevelChangeTypeEnum'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='relative' />
+      <xs:enumeration value='absolute' />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='keyed_tools'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='history_tool' type='atc:keyedTool' />
+        <xs:element name='srprobe_tool' type='atc:keyedTool' />
+        <xs:element name='route_tool'   type='atc:keyedTool' />
+        <xs:element name='vector_tool'  type='atc:keyedTool' />
+        <xs:element name='brline_tool'  type='atc:keyedTool' />
+        <xs:element name='accept_tool'  type='atc:keyedTool' />
+        <xs:element name='handoff_tool' type='atc:keyedTool' />
+        <xs:element name='pause_tool'   type='atc:keyedTool' />
+        <xs:element name='resume_tool'  type='atc:keyedTool' />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='keyedTool'>
+    <xs:attribute name='key' use='required' type='xs:NCName' />
+    <xs:attribute name='tag' use='optional' default='---' type='xs:string' />
+  </xs:complexType>
+
+  <xs:element name='initial_tools'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element name='srprobe_tool'>
+          <xs:complexType>
+            <xs:attribute name='toggle' use='optional' default='1' type='xs:positiveInteger' />
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='scoring'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+
+        <xs:element name='correct_decision_links'                   type='atc:decisionLinks'/>
+        <xs:element name='incorrect_decision_links'                 type='atc:decisionLinks'/>
+        <xs:element name='goal_success_score_multiplier'            type='xs:int' />
+        <xs:element name='goal_failure_score'                       type='xs:int' />
+        <xs:element name='goal_success'                             type='atc:comparisonFormula'/>
+        <xs:element name='goal_failure'                             type='atc:comparisonFormula'/>
+        <xs:element name='initial'                                  type='atc:scoredEvent' />
+        <xs:element name='already_actioned'                         type='atc:scoredEvent' />
+        <xs:element name='hit_conflict_ontime'                      type='atc:scoredEvent' />
+        <xs:element name='hit_conflict_not_ontime'                  type='atc:scoredEvent' />
+        <xs:element name='hit_after_conflict'                       type='atc:scoredEvent' />
+        <xs:element name='too_late_conflict'                        type='atc:scoredEvent' />
+        <xs:element name='false_alarm_conflict'                     type='atc:scoredEvent' />
+        <xs:element name='false_alarm_conflict_non_target'          type='atc:scoredEvent' />
+        <xs:element name='hit_non_conflict'                         type='atc:scoredEvent' />
+        <xs:element name='too_late_non_conflict'                    type='atc:scoredEvent' />
+        <xs:element name='hit_other_ontime'                         type='atc:scoredEvent' />
+        <xs:element name='false_alarm_non_conflict'                 type='atc:scoredEvent' />
+        <xs:element name='false_alarm_non_conflict_non_target'      type='atc:scoredEvent' />
+        <xs:element name='prior_conflict_for_conflict_pair'         type='atc:scoredEvent' />
+        <xs:element name='prior_conflict_for_non_conflict_pair'     type='atc:scoredEvent' />
+        <xs:element name='prior_conflict_for_non_target_pair'       type='atc:scoredEvent' />
+        <xs:element name='prior_non_conflict_for_conflict_pair'     type='atc:scoredEvent' />
+        <xs:element name='prior_non_conflict_for_non_conflict_pair' type='atc:scoredEvent' />
+        <xs:element name='prior_non_conflict_for_non_target_pair'   type='atc:scoredEvent' />
+        <xs:element name='miss_conflict'                            type='atc:scoredEvent' />
+        <xs:element name='miss_non_conflict'                        type='atc:scoredEvent' />
+		<xs:element name='miss_other_conflict'						type='atc:scoredEvent' />
+        <xs:element name='missed_acceptance'                        type='atc:scoredEvent' />
+        <xs:element name='aircraft_acceptance_success'		        type='atc:scoredEvent' />
+        <xs:element name='handoff_success'		                    type='atc:scoredEvent' />
+        <xs:element name='handoff_failure'		                    type='atc:scoredEvent' />
+        <xs:element name='false_hit_conflict_ontime'		        type='atc:scoredEvent' />
+        <xs:element name='false_alarm_other'		                type='atc:scoredEvent' />
+        <xs:element name='miss_conflict_non_target'		            type='atc:scoredEvent' />
+        <xs:element name='declare_other_ontime'		                type='atc:scoredEvent' />
+        <xs:element name='declare_other_not_ontime'		            type='atc:scoredEvent' />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='scoredEvent'>
+    <xs:attribute name='value'      type='xs:int'         />
+    <xs:attribute name='audio'      type='xs:string'      />
+    <xs:attribute name='duration'   type='xs:int'         />
+    <xs:attribute name='delay'      type='xs:int'         />
+    <xs:attribute name='idxref'     type='xs:string'      />
+  </xs:complexType>
+
+  <xs:complexType name='decisionLinks'>
+    <xs:sequence>
+      <xs:element name='global_ref' type='xs:string' minOccurs='0' maxOccurs='unbounded'/>
+    </xs:sequence>
+    <xs:attribute name='idxref' type='xs:string'/>
+  </xs:complexType>
+
+  <xs:complexType name='comparisonFormula'>
+    <xs:attribute name='idxref1'    type='xs:string'/>
+    <xs:attribute name='idxref2'    type='xs:string'/>
+    <xs:attribute name='comparison' type='atc:ConditionalTextCondition'/>
+  </xs:complexType>
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:map
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='map'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:region'                                             />
+        <xs:element ref='atc:location'       minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:location_alias' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:route'    minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:sector'   minOccurs='0' maxOccurs='unbounded' />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='region'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:point2dAttributes' />
+      <xs:attribute name='x_dim' use='required' type='xs:decimal'/>
+      <xs:attribute name='y_dim' use='required' type='xs:decimal'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='location'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attributeGroup ref='atc:point2dAttributes' />
+      <xs:attribute name='visible' type='xs:string'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:attributeGroup name='locationReference'>
+    <xs:attribute name='location' use='required' type='xs:IDREF' />
+  </xs:attributeGroup>
+
+  <xs:element name='location_alias'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attributeGroup ref='atc:locationReference' />
+    </xs:complexType>
+  </xs:element>
+  
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  <atc:route> type definition                      +++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:element name='route'>
+    <xs:complexType>
+      <xs:choice minOccurs='2' maxOccurs='unbounded'>
+        <xs:element name='point'    type='atc:point2D' />
+        <xs:element name='pointref' type='atc:locationRef' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  point descriptor group                            ++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:complexType name='locationRef'>
+    <xs:attribute name='location' type='xs:IDREF'/>
+  </xs:complexType>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  <atc:sector> type definition                      ++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+  
+  <xs:element name='sector'>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base='atc:region2D'>
+          <xs:attribute name='status' use='optional' default='non-active' type='atc:activeStatus' />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='activeStatus'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='active'    />
+      <xs:enumeration value='non-active'/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:sky
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='sky'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded' >
+        <xs:element ref='atc:aircraft' />
+        <xs:element ref='atc:area'     />
+        <xs:element ref='atc:aircraftstatus' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+  
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:aircraft
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='aircraft'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:start'      minOccurs='0' />
+        <xs:element ref='atc:altitude'   minOccurs='0' />
+        <xs:element ref='atc:velocity'   minOccurs='0' />
+        <xs:element ref='atc:flightpath'               />
+        <xs:element ref='atc:closedpath' minOccurs='0' />
+      </xs:sequence>
+      <xs:attribute name='idx'  type='xs:NCName' />
+      <xs:attribute name='type' type='xs:IDREF'  />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='start'        type='xs:integer' />
+
+  <xs:element name='acceleration' type='xs:decimal' />
+  <xs:element name='altitude'     type='xs:decimal' />
+  <xs:element name='ascent'       type='xs:decimal' />
+  <xs:element name='velocity'     type='xs:decimal' />
+
+  <xs:element name='flightpath'>
+    <xs:complexType>
+      <xs:choice minOccurs='2' maxOccurs='unbounded'>
+        <xs:element name='point'    type='atc:flightPathPoint' />
+        <xs:element name='pointref' type='atc:flightPathPointRef' />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='closedpath' />
+
+  <xs:complexType name='flightPathPoint'>
+    <xs:group ref='atc:flightPathPointExtension' />
+    <xs:attributeGroup ref='atc:point2dAttributes' />
+  </xs:complexType>
+
+  <xs:complexType name='flightPathPointRef'>
+    <xs:group ref='atc:flightPathPointExtension' />
+    <xs:attribute name='location' type='xs:IDREF' />
+  </xs:complexType>
+
+  <xs:group name='flightPathPointExtension'>
+    <xs:all>
+      <xs:element ref='atc:altitude'     minOccurs='0' />
+      <xs:element ref='atc:ascent'       minOccurs='0' />
+      <xs:element ref='atc:velocity'     minOccurs='0' />
+      <xs:element ref='atc:acceleration' minOccurs='0' />
+    </xs:all>
+  </xs:group>
+
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:area
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+
+  <xs:element name='area'>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base='atc:region2D'>
+          <xs:attribute name='type' use='required'/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~     atc:aircraftstatus
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->    
+  <xs:simpleType name='conflictType'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value='conflict'    />
+      <xs:enumeration value='nonconflict' />
+      <xs:enumeration value='other' />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:element name='aircraftstatus'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='aircraft'     type='xs:string' minOccurs='2' maxOccurs='2'/>
+        <xs:element name='status'       type='atc:conflictType' />
+        <xs:element name='finaltime'    type='xs:integer' minOccurs='0'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+<!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    UI Definition
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+  
+  <xs:element name='ui'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element ref='atc:dialog'     />
+        <xs:element ref='atc:connection' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='connection'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:signal' />
+        <xs:element ref='atc:slot' />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='signal'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <!-- @todo: enumeration of valid signals -->
+        <xs:extension base='xs:string'>
+          <xs:attribute name='tx' type='xs:IDREF'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='slot'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <!-- enumeration of valid slots -->
+        <xs:extension base='xs:string'>
+          <xs:attribute name='rx' type='xs:IDREF'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='timer'>
+    <xs:complexType>
+      <xs:attribute name='interval' type='xs:int' />
+      <xs:attribute name='singleShot' use='optional' type='xs:boolean' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='pause'>
+    <xs:complexType>
+      <xs:attribute name='onShow' default='true' type='xs:boolean' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='locate'>
+    <xs:complexType>
+      <xs:attribute name='grid' default='CENTER' type='atc:gridPosition' />
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- ================================================== Presentation Items -->
+  <!-- ===================================================================== -->
+  
+  <xs:element name='presentation'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:phase' maxOccurs='unbounded' />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='phase'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element name='input'          type='atc:idxrefDef' />
+        <xs:element name='display'        type='atc:idxrefDef' />
+        <xs:element name='instruction'    type='atc:idxrefDef' />
+        <xs:element name='scoreFeedback'  type='atc:idxrefDef'/>
+        <xs:element ref='atc:external'  />
+        <xs:element ref='atc:trial' />
+        <xs:element ref='atc:block_trial' />
+      </xs:choice>
+      <xs:attributeGroup ref='atc:uniqueID' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='external'>
+    <xs:complexType>
+      <xs:sequence>
+          <!--<xs:element name='file' type='xs:string' minOccurs='0' />-->
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attribute name='file' use='required' type='xs:string' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='trial'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='atc:keyEvent'  minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:timeEvent' minOccurs='0'                       />
+      </xs:sequence>
+      <xs:attributeGroup ref='atc:uniqueID' />
+      <xs:attribute name='param' use='required' type='xs:IDREF' />
+      <xs:attribute name='map'   use='required' type='xs:IDREF' />
+      <xs:attribute name='sky'   use='required' type='xs:IDREF' />
+      <xs:attribute name='ui'                   type='xs:IDREF' />
+      <xs:attribute name='trial_count_global_ref' type='xs:string' use='optional'/>
+      <xs:attribute name='type' type='atc:trialType' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='block_trial'>
+    <xs:complexType>
+      <xs:choice minOccurs='0' maxOccurs='unbounded'>
+        <xs:element ref='atc:trial'     minOccurs='0' maxOccurs='unbounded' />
+        <xs:element ref='atc:timeEvent' minOccurs='0'   />
+      </xs:choice>
+	  <xs:attribute name='waitTimeOut'   use='optional' default='false'   type='xs:boolean' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='trialType'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='normal'     />
+      <xs:enumeration value='practice'   />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='keyEvent'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:token'>
+          <xs:attribute name='type' type='atc:keyEventType' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name='keyEventType'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='terminateTrial'/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name='timeEvent'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:positiveInteger'>
+          <xs:attribute name='timeUnit' type='atc:timeMeasure' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name='timeMeasure'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='seconds'     	/>
+      <xs:enumeration value='milliSeconds'  />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!--<xs:element name='timeEvent' type='xs:positiveInteger' />-->
+
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  atc:idx attribute type definition                 ++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:attributeGroup name='uniqueID'>
+    <xs:attribute name='idx' use='required' type='xs:ID' />
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name='reference'>
+    <xs:attribute name='ref' type='xs:IDREF' />
+  </xs:attributeGroup>
+
+  <!-- @todo: -->
+  <xs:complexType name='idxrefDef' >
+    <xs:attribute name='idxref' type='xs:IDREF' />
+  </xs:complexType>
+  
+<!-- 
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Global Attribute Groups
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+  <xs:attributeGroup name='point2dAttributes'>
+    <xs:attribute name='x' use='required' type='xs:decimal'/>
+    <xs:attribute name='y' use='required' type='xs:decimal'/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name='arc2dAttributes'>
+    <xs:attributeGroup ref='atc:point2dAttributes' />
+    <xs:attribute name='r' use='optional' type='xs:decimal'/>
+    <xs:attribute name='a' use='optional' type='xs:decimal'/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name='ellipse2dAttributes'>
+    <xs:attributeGroup ref='atc:point2dAttributes' />
+    <xs:attribute name='w' use='required' type='xs:decimal'/>
+    <xs:attribute name='h' use='required' type='xs:decimal'/>
+    <xs:attribute name='a' use='required' type='xs:decimal'/>
+  </xs:attributeGroup>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  atc:point2D type definition                      +++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:complexType name='point2D'>
+    <xs:attributeGroup ref='atc:point2dAttributes' />
+  </xs:complexType>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  atc:region2D type definition                     +++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:complexType name='region2D'>
+    <xs:sequence>
+      <xs:group ref='atc:region_descriptor' maxOccurs='unbounded'/>
+      <xs:element name='remove' minOccurs='0' maxOccurs='unbounded' type='atc:idxrefDef' />
+    </xs:sequence>
+    <xs:attributeGroup ref='atc:uniqueID' />
+  </xs:complexType>
+
+<!--
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ++++  atc:region_descriptor group definition            ++++
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ -->
+
+  <xs:group name='region_descriptor'>
+    <xs:choice>
+      <xs:element ref='atc:vertex'  />
+      <xs:element ref='atc:arc'     />
+      <xs:element ref='atc:ellipse' />
+    </xs:choice>
+  </xs:group>
+
+  <xs:element name='vertex'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:point2dAttributes' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='arc'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:arc2dAttributes' />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='ellipse'>
+    <xs:complexType>
+      <xs:attributeGroup ref='atc:ellipse2dAttributes' />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
