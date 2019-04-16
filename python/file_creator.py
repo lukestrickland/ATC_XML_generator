@@ -2,7 +2,7 @@ import glob
 import shutil
 import os
 
-os.chdir("..")
+print(os.getcwd())
 
 n_files_one = len([f for f in glob.glob("XML" +  '/ppt' + str(1) + "_**.xml", recursive=True)])
 n_files_all = len([f for f in glob.glob("XML" + "**/*.xml", recursive=True)])
