@@ -74,9 +74,45 @@ get_auto_fails <- function (auto_exp_var_df, num_fails) {
   
 }
 
+#todo make make_manual function
+#inputs:callsign, auto_exp_var_df
+#outputs: a manual df which is a shuffled version
+#of auto df (except for the fail trials which are pegged on order)
+#also has different callsigns
+
+make_manual <- function(auto_exp_var_df, callsigns){
+  manual_exp_var_df <- auto_exp_var_df
+  
+  #Shuffle presentation order (except for fail trials)
+  all_possible_presOrders <- 1:length(manual_exp_var_df$presOrder) 
+  
+  nonfail_presOrders <- 
+    all_possible_presOrders[!(
+      all_possible_presOrders %in% manual_exp_var_df$presOrder[manual_exp_var_df$failtrial]
+    )]
+  
+  manual_exp_var_df$presOrder[!manual_exp_var_df$failtrial] <- sample(nonfail_presOrders,
+                                                                      length(nonfail_presOrders),
+                                                                      replace=F)
+  #Add new callsigns
+  nPairs <- length(manual_exp_var_df$pairNumber)
+  callsign_pool <-
+    as.character(sample(callsigns, 2 * nPairs, replace = FALSE))
+  manual_exp_var_df$ac1_cs <- callsign_pool[1:nPairs]
+  manual_exp_var_df$ac2_cs <- callsign_pool[(nPairs+1):length(callsign_pool)]
+  
+  manual_exp_var_df
+  
+}
+
+
+#OLD WAY: match a manual df with an auto one
+#the difference between make_manual is this one
+#takes a manual df with a whole other list of aircraft pairs
 #inputs: the exp_var_df for the manual condition, the df 
 #for the automated condition, and a data frame containing
 #conflict and non-conflict failtrials
+
 
 #outputs: a different manual data frame of experimental variables.
 #a bunch of trials are matched to the automation failures from auto
