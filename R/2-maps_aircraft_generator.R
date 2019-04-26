@@ -18,8 +18,7 @@ for (p in participant_number){
     
     #create initial data frames 
     auto_exp_var_df <- create_exp_var_df(nPairs=nPairs, callsigns=callsigns)
-    manual_exp_var_df <- create_exp_var_df(nPairs=nPairs, callsigns=callsigns)
-    
+
     #Randomly pick auto fail trials, 
     #match corresponding manual trials on all stimulus properties
     num_fails <- failure_rate* length(auto_exp_var_df$DOMS)
@@ -32,10 +31,8 @@ for (p in participant_number){
                              failtrials$fail_nonconflicts)] <- TRUE
    
      #pick the manual trials with presOrder matching the auto failures
-    manual_exp_var_df <- add_matched_auto_fails_reshuffle(
-                                manual_exp_var_df= manual_exp_var_df,
-                                auto_exp_var_df= auto_exp_var_df,
-                                failtrials = failtrials)
+    manual_exp_var_df <- make_manual(auto_exp_var_df= auto_exp_var_df,
+                                callsigns = callsigns)
 
     ##for all auto trials ship matching rows to manual except for stimulus
 
