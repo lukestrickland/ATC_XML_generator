@@ -41,8 +41,9 @@
 				automation is recommending classifying this pair as a non-conflict.</font></p></font></p>
 			
 				<p align="center"><font face="calibri" size="8"><b>Although the automated decision aid is reliable, it is not perfect. 
-				In the event that the automated decision aid recommends an incorrect classification, it is essential that you chose the 
-				correct classification instead.</font></p></font></p>
+				In the event that the automated decision aid recommends an incorrect classification, it is essential that you choose the 
+				correct classification instead. Incorrectly following the automation's recommendation will result in a severe
+				penalty to your score. Thus, if you only rely only on automation, you will lose points over the block. </font></p></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>n</b> to continue.</font></p>
 				

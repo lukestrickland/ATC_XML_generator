@@ -716,6 +716,7 @@
         <xs:element name='aircraft_handoff'    minOccurs='0' maxOccurs='1' type='atc:aircraftHandoffType'       />
         <xs:element ref='atc:conflictDeclarationActions' minOccurs='0' maxOccurs='1' /> 
         <xs:element name='update_rate'       minOccurs='0' maxOccurs='1' type='xs:unsignedInt'/>
+		<xs:element name='automation'		 minOccurs='0' maxOccurs='1' type='xs:boolean'/>
 <!--    <xs:element name='update_multiplier' minOccurs='0' maxOccurs='1' type='xs:unsignedInt'/>  -->
         <xs:element name='scenario_tester'   minOccurs='0' maxOccurs='1' type='xs:float'/>
 
@@ -791,6 +792,7 @@
     <xs:complexType>
       <xs:choice minOccurs='0' maxOccurs='unbounded'>
         <xs:element name='time'     type='atc:timeDisplay'  />
+		<xs:element name='automation' />
         <xs:element name='goal'     type='atc:infoBlockGoalDef' />
         <xs:element name='score'    type='atc:scoreDisplay'     />
         <xs:element name='tool' />
@@ -1187,6 +1189,7 @@
         <xs:element ref='atc:velocity'   minOccurs='0' />
         <xs:element ref='atc:flightpath'               />
         <xs:element ref='atc:closedpath' minOccurs='0' />
+		<xs:element name='autorecommendation' type='xs:string' minOccurs='0'/>
       </xs:sequence>
       <xs:attribute name='idx'  type='xs:NCName' />
       <xs:attribute name='type' type='xs:IDREF'  />

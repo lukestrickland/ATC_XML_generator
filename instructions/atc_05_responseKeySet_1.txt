@@ -2,7 +2,7 @@
 <!--###################################################################### RESPONSE KEY DEFINITIONS #####-->
 <!--#####################################################################################################-->
 
-<!-- Response Key Set 3 (K-J-D) -->
+<!-- Response Key Set 1 -->
 
     <atc:conflictDeclarationActions atc:score_change='true' atc:end_trial='true'>
       <atc:conflict_key>f</atc:conflict_key>

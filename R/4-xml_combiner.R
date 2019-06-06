@@ -38,7 +38,7 @@ instructions_train <-
 conflict_feedback <-
   toString(readtext(file = "instructions/atc_training_conflict_feedback.txt"))
 
-maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
+training_maps <- toString(readtext(file = 'components/atc_09_maps_and_ac_p_ALL_s0_TRAINING.txt'))
 
 training_trials <- read_trial_csv('components/xml_trials_TRAINING.csv', training=TRUE)
 
@@ -109,17 +109,16 @@ for (ppt in participant_number){
                                       '_block2_cond_', blk2, '.xml', sep = ''), sep = '\n\n')
   }
   
-  instructions <- paste(instructions_train, '\n\n', instructions_key, '\n\n',
+  instructions_train_ppt <- paste(instructions_train, '\n\n', instructions_key, '\n\n',
                         instructions_gen, '\n\n',
                         conflict_feedback )
   
-  training_XML<- paste(preamble, instructions,
+  training_XML<- paste(preamble, instructions_train_ppt,
                        mapaircraft_preamble,display_parameters, scoring,
                        response_key_set,
-                       clock_position, maps, display_general_instructions,
+                       clock_position, training_maps, display_general_instructions,
                        begin_block_message,
                        training_trials, post)
-  
   
   writeLines(training_XML, paste("XML/ppt", ppt, "_training", ".xml", sep=""), sep = '\n\n')
   

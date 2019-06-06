@@ -119,49 +119,59 @@ make_manual <- function(auto_exp_var_df, callsigns){
 #condition. The rest of the trials are the same as they were 
 #but with a shuffled presentation order (to make sure they do not
 #conflict with presetnation order of matches to auto failures)
+# 
+# add_matched_auto_fails_reshuffle <- function (manual_exp_var_df, 
+#                                               auto_exp_var_df,
+#                                               failtrials) {
+#   
+#   columns_to_replace <-  c("presOrder", "ac1_type" ,  "ac2_type",
+#                            "ac1_fl", "ac2_fl", "angle", "ac1_speed",
+#                            "ac2_speed", "DOMS", "TTMS", "OOP", "conflict_status",
+#                            "stimulus", "failtrial")
+#  
+#   manual_exp_var_df$failtrial = FALSE
+#   #Replace first (num conflict fails) of manual trials with
+#   #the auto fail trials and same for nonconflicts
+#   manual_exp_var_df[manual_exp_var_df$conflict_status=='conflict',
+#                     ][1:length(failtrials$fail_conflicts),
+#                       columns_to_replace] <-
+#     auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_conflicts,
+#                     columns_to_replace]
+#   
+#   manual_exp_var_df[manual_exp_var_df$conflict_status=='nonconflict',
+#                     ][1:length(failtrials$fail_nonconflicts),
+#                       columns_to_replace] <-
+#     auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_nonconflicts,
+#                     columns_to_replace]
+#   
+#   #randomly shuffle pres-order of all stimuli not matched to failures, making 
+#   #sure that they do not conflict with the presOrder of the manual trials
+#   #matched to auto failures (which were matched to the auto failure presOrders
+#   #in the step above)
+#   
+#   all_possible_presOrders <- 1:length(manual_exp_var_df$presOrder) 
+#   nonfail_presOrders <- 
+#     all_possible_presOrders[!(
+#       all_possible_presOrders %in% manual_exp_var_df$presOrder[manual_exp_var_df$failtrial]
+#     )]
+#   
+#   manual_exp_var_df$presOrder[!manual_exp_var_df$failtrial] <- sample(nonfail_presOrders,
+#                                                                       length(nonfail_presOrders),
+#                                                                       replace=F)
+#   manual_exp_var_df
+#   
+# }
 
-add_matched_auto_fails_reshuffle <- function (manual_exp_var_df, 
-                                              auto_exp_var_df,
-                                              failtrials) {
-  
-  columns_to_replace <-  c("presOrder", "ac1_type" ,  "ac2_type",
-                           "ac1_fl", "ac2_fl", "angle", "ac1_speed",
-                           "ac2_speed", "DOMS", "TTMS", "OOP", "conflict_status",
-                           "stimulus", "failtrial")
- 
-  manual_exp_var_df$failtrial = FALSE
-  #Replace first (num conflict fails) of manual trials with
-  #the auto fail trials and same for nonconflicts
-  manual_exp_var_df[manual_exp_var_df$conflict_status=='conflict',
-                    ][1:length(failtrials$fail_conflicts),
-                      columns_to_replace] <-
-    auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_conflicts,
-                    columns_to_replace]
-  
-  manual_exp_var_df[manual_exp_var_df$conflict_status=='nonconflict',
-                    ][1:length(failtrials$fail_nonconflicts),
-                      columns_to_replace] <-
-    auto_exp_var_df[auto_exp_var_df$presOrder %in% failtrials$fail_nonconflicts,
-                    columns_to_replace]
-  
-  #randomly shuffle pres-order of all stimuli not matched to failures, making 
-  #sure that they do not conflict with the presOrder of the manual trials
-  #matched to auto failures (which were matched to the auto failure presOrders
-  #in the step above)
-  
-  all_possible_presOrders <- 1:length(manual_exp_var_df$presOrder) 
-  nonfail_presOrders <- 
-    all_possible_presOrders[!(
-      all_possible_presOrders %in% manual_exp_var_df$presOrder[manual_exp_var_df$failtrial]
-    )]
-  
-  manual_exp_var_df$presOrder[!manual_exp_var_df$failtrial] <- sample(nonfail_presOrders,
-                                                                      length(nonfail_presOrders),
-                                                                      replace=F)
-  manual_exp_var_df
-  
+make_auto_aids <- function(stimuli, failtrials) {
+  aids <- stimuli
+  aids[stimuli=="conflict" & failtrials] <- "nonconflict"
+  aids[stimuli=="nonconflict" & failtrials] <- "conflict"
+  as.character(factor(
+    aids,
+    levels = c("conflict", "nonconflict"),
+    labels = c("CONFLICT", "NON-CONF")
+  ))
 }
-
 
 #Creates inputs for the sim
 #inputs: experimental variable df, aspect ratio, x dimension
@@ -241,6 +251,7 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   ac2_cs <- exp_var_df$ac2_cs
   stimulus <- exp_var_df$stimulus
   presOrder <- exp_var_df$presOrder
+  autorec <- exp_var_df$autorec
   
   #assign variables from sim_input_df
   x1 <- sim_input_df$x1
@@ -261,7 +272,7 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   xml_ac <- c()
   xml_maps <- c()
   
-  for (i in 1:length(exp_var_df$presOrder)){
+  for (i in 1:length(presOrder)){
     xml_ac[i] <- paste(
       '<!-- ', toupper(condition), ' Pair ', presOrder[i], ': Aircraft 1 -->', '\n',
       '<atc:sky atc:idx=', '\'', 'sky', presOrder[i], '\'', '>', '\n',
@@ -276,7 +287,9 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
       '<atc:altitude>', ac1_fl[i], '00', '</atc:altitude>', '</atc:point>', '\n',
       '<atc:point atc:x=', '\'', round(x1end[i], digits = 3), '\'', ' atc:y=', '\'', round(y1end[i], digits = 3), '\'', '>', '\n',
       '<atc:altitude>', ac1_fl[i], '00', '</atc:altitude>', '</atc:point>', '\n',
-      '</atc:flightpath>', '</atc:aircraft>', '\n\n',
+      '</atc:flightpath> \n', 
+      '<atc:autorecommendation>', autorec[i], '</atc:autorecommendation> \n', 
+      '</atc:aircraft>', '\n\n',
       
       '<!-- ', toupper(condition), ' Pair ', presOrder[i], ': Aircraft 2 -->', '\n',
       '<atc:aircraft atc:type=', '\'', ac2_type[i], '\'', ' atc:idx=', '\'', ac2_cs[i], '\'', '>', '\n',
@@ -290,7 +303,9 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
       '<atc:altitude>', ac2_fl[i] ,'00', '</atc:altitude>', '</atc:point>', '\n',
       '<atc:point atc:x=', '\'', round(x2end[i], digits = 3), '\'', ' atc:y=', '\'', round(y2end[i], digits = 3), '\'', '>', '\n',
       '<atc:altitude>', ac2_fl[i] ,'00', '</atc:altitude>', '</atc:point>', '\n',
-      '</atc:flightpath>', '</atc:aircraft>', '\n',
+      '</atc:flightpath> \n', 
+      '<atc:autorecommendation>', autorec[i], '</atc:autorecommendation> \n', 
+      '</atc:aircraft>', '\n',
       '<atc:aircraftstatus>', '\n',
       '<atc:aircraft>', ac1_cs[i], '</atc:aircraft>', '\n',
       '<atc:aircraft>', ac2_cs[i], '</atc:aircraft>', '\n',

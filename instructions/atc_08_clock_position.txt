@@ -4,6 +4,8 @@
 <atc:time atc:type='countDown' atc:source='blockTrial'/>
 </atc:info_block> 
 
+<atc:automation>true</atc:automation>
+
 </atc:param>
 
 

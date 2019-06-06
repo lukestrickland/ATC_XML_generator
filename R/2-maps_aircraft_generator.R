@@ -33,6 +33,12 @@ for (p in participant_number){
      #pick the manual trials with presOrder matching the auto failures
     manual_exp_var_df <- make_manual(auto_exp_var_df= auto_exp_var_df,
                                 callsigns = callsigns)
+    
+    #Add in decision aids
+    manual_exp_var_df$autorec <- "########"
+    auto_exp_var_df$autorec <-
+      make_auto_aids(stimuli = auto_exp_var_df$stimulus,
+                     failtrials = auto_exp_var_df$failtrial)
 
     ##for all auto trials ship matching rows to manual except for stimulus
 
@@ -66,6 +72,7 @@ for (p in participant_number){
 #Create one training set for everybody
 
 training_exp_var_df <- create_exp_var_df(nPairs=40, callsigns=callsigns)
+training_exp_var_df$autorec <- ""
 training_sim_input_df <- create_sim_input_df(exp_var_df = training_exp_var_df,
                                          aspectRatio = 0.625, x_dim=180)
 training_maps_and_ac <- create_xml_ac_and_maps(
