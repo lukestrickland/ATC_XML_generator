@@ -2,8 +2,7 @@
 <!--#######################################-->
 <!--##### MAP AND AIRCRAFT PARAMETERS #####-->
 <!--#######################################-->
-
-	<atc:scoreFeedback atc:idx='feedback' atc:type='general' 
+<atc:scoreFeedback atc:idx='feedback' atc:type='general' 
 		atc:idxref1='participant_decision' atc:comparison='notEqualTo' atc:idxref2='trial_conflict_type'>
 		<atc:font atc:family='Arial' atc:pointSize='20' />
         <atc:text>
@@ -22,7 +21,7 @@
 			<center>
 				<table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 				<tr><td align="left"><font face="calibri" size="1">
-					<p align="center"><font face="calibri" size="8"><b>This pair was in conflict</b></font></p>
+					<p align="center"><font face="calibri" size="8">This pair was in conflict</font></p>
 				</td></tr>
 				</table>
 			</center>
@@ -40,9 +39,68 @@
 			</qt>]]>
 		</atc:conditionalTextWithGlobal>
     </atc:scoreFeedback>
+	
+	<atc:scoreFeedback atc:idx='feedback_manual' atc:type='general'>
+		<atc:font atc:family='Arial' atc:pointSize='20' />
+        <atc:text>
+			<![CDATA[<qt>
+			<center>
+				<table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="8"><u>Your score:</u></font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials</font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6">You responded incorrectly on %d trials</font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6"><b>Overall accuracy: %d%</b></font></p>
+				</td></tr>
+				</table>
+			</center>
+			</qt>]]>
+		</atc:text>
+		<atc:global_ref>correct_decisions</atc:global_ref>
+		<atc:global_ref>incorrect_decisions</atc:global_ref>
+		<atc:global_ref>accuracy</atc:global_ref>
+    </atc:scoreFeedback>
+	
+	<atc:scoreFeedback atc:idx='feedback_automatic' atc:type='general'>
+		<atc:font atc:family='Arial' atc:pointSize='20' />
+        <atc:text>
+			<![CDATA[<qt>
+			<center>
+				<table width="80%" bgcolor="lightgrey" border="0" cellspacing="50" cellpadding="10">
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="8"><u>Your score:</u></font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials</font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6">When the automated recommendation was right,<br>
+					you incorrectly rejected the recommendation on %d trials</font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6">When the automated recommendation was wrong,<br>
+					you incorrectly accepted the recommendation on %d trials.</font></p>
+				</td></tr>
+				<tr><td align="left"><font face="calibri" size="1">
+					<p align="center"><font face="calibri" size="6"><b>Overall accuracy: %d%</b></font></p>
+				</td></tr>
+				</table>
+			</center>
+			</qt>]]>
+		</atc:text>
+		<atc:global_ref>correct_decisions</atc:global_ref>
+		<atc:global_ref>incorrect_descisions_with_correct_recommendation</atc:global_ref>
+		<atc:global_ref>incorrect_descisions_with_incorrect_recommendation</atc:global_ref>
+		<atc:global_ref>accuracy</atc:global_ref>
+    </atc:scoreFeedback>
 </atc:config>
 <atc:data>
-
 
 <!-- Experimental Phase Parameters-->
 <atc:param atc:idx='default'>
