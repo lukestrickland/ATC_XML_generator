@@ -19,7 +19,7 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
       '<atc:instruction atc:idxref=', '\'', 'interTrialInfo', '\'', '/>', '\n',
       '<atc:block_trial atc:waitTimeOut=', '\'', 'false', '\'', '>', '\n\n', sep = '')
   }
-  xml_trials <- as.data.frame.character(xml_trials)
+  xml_trials <- as.data.frame.character(xml_trials, stringsAsFactors=FALSE)
   
   xml_load <- c()
   for (j in 1:nPairs){
@@ -33,7 +33,7 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
   }
   xml_load_split <- split(xml_load, ceiling(seq_along(xml_load)/trafficLoad))
   xml_load_split <- as.data.frame(xml_load_split)
-  xml_load_split.T <- as.data.frame(t(xml_load_split))
+  xml_load_split.T <- as.data.frame(t(xml_load_split), stringsAsFactors=FALSE)
   
   xml_TP <- paste(
     '<atc:timeEvent atc:timeUnit=', '\'', 'milliSeconds', '\'', '>', TP, '</atc:timeEvent>', '\n\n',
@@ -45,6 +45,25 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
   trials <- cbind(xml_trials, xml_load_split.T, xml_TP, stringsAsFactors=FALSE)
   pair_cols <- grep("V", colnames(trials))
   colnames(trials)[pair_cols] <- paste("pair", pair_cols-1, sep="")
+  
+  if (condition[1]=="AUTO"){
+    trials <- rbind(
+      trials,
+      c(
+        "<atc:phase atc:idx='autofB'>",
+        "<atc:scoreFeedback atc:idxref='feedback_automatic'/>",
+        "</atc:phase>"
+      )
+    ) } else if (condition[1]=="MANUAL") {
+      trials <- rbind(
+        trials,
+        c(
+          "<atc:phase atc:idx='manfB'>",
+          "<atc:scoreFeedback atc:idxref='feedback_manual'/>",
+          "</atc:phase>"
+        ))
+  }
+  
   trials
 }
 
