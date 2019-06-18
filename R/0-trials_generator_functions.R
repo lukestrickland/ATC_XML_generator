@@ -38,6 +38,7 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
   xml_TP <- paste(
     '<atc:timeEvent atc:timeUnit=', '\'', 'milliSeconds', '\'', '>', TP, '</atc:timeEvent>', '\n\n',
     '</atc:block_trial>', '\n',
+    "<atc:scoreFeedback atc:idxref='feedback'/>", '\n',
     '</atc:phase>', '\n\n', sep = '')
   xml_TP <- rep(xml_TP, nTrials)
   
