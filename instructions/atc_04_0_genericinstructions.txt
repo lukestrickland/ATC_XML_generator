@@ -28,7 +28,7 @@
 		    <table width="70%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
 			
-				<p align="center"><font face="calibri" size="6"><b>YOU WILL NOW BEGIN THE AIR TRAFFIC CONTROL TASK</b></font></p>
+				<p align="center"><font face="calibri" size="6"><b>Please let the experimenter know now if you need to take a break first or if you have any questions. Press the spacebar when you are ready to begin the task.</b></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>SPACE</b> to continue.</font></p>
 				

@@ -58,8 +58,8 @@ create_trials <- function (condition, timePressure, trafficLoad, nTrials){
       trials <- rbind(
         trials,
         c(
-          "<atc:phase atc:idx='manfB'>",
-          "<atc:scoreFeedback atc:idxref='feedback_manual'/>",
+          "<atc:phase atc:idx='manfB'>\n",
+          "<atc:scoreFeedback atc:idxref='feedback_manual'/>\n",
           "</atc:phase>"
         ))
   }

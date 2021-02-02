@@ -1,0 +1,16 @@
+
+<!-- Clock Position -->
+<atc:info_block atc:position='TOPLEFT'>
+<atc:time atc:type='countDown' atc:source='blockTrial'/>
+<atc:automation/>
+</atc:info_block> 
+
+<atc:automation>true</atc:automation>
+
+</atc:param>
+
+
+<!--#############################-->
+<!--##### MAPS AND AIRCRAFT #####-->
+<!--#############################-->
+

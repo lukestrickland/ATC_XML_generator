@@ -14,14 +14,14 @@ instructions_gen <-
 mapaircraft_preamble <- toString(readtext(
   file = 'instructions/atc_04_aircraft_parameters.txt'))
 
-display_parameters <-
-  toString(readtext(file = 'instructions/atc_06_display_parameters.txt'))
+display_parameters_training <- toString(readtext(file = paste(
+  'instructions/atc_06_display_parameters','_', 'MANUAL', '.txt', sep = "")))
 
 scoring <- toString(readtext(file = 
                                'instructions/atc_07_scoring_system_neutral.txt'))
 
-clock_position <- toString(readtext(file = 
-                                      'instructions/atc_08_clock_position.txt'))
+clock_position_training <- toString(readtext(file = paste(
+  'instructions/atc_08_clock_position','_', 'MANUAL', '.txt', sep = "")))
 
 display_general_instructions <- toString(readtext(file = 
                                                     'instructions/atc_10_display_general_instructions.txt'))
@@ -80,10 +80,8 @@ for (ppt in participant_number){
                                          instructions_key = instructions_key,
                                          instructions_gen = instructions_gen,
                                          mapaircraft_preamble = mapaircraft_preamble, 
-                                         display_parameters = display_parameters, 
                                          scoring = scoring,
                                          response_key_set = response_key_set, 
-                                         clock_position = clock_position, 
                                          display_general_instructions = display_general_instructions, 
                                          begin_block_message = begin_block_message, 
                                          post=post)
@@ -97,10 +95,8 @@ for (ppt in participant_number){
                                          instructions_key = instructions_key,
                                          instructions_gen = instructions_gen, 
                                          mapaircraft_preamble = mapaircraft_preamble, 
-                                         display_parameters = display_parameters, 
                                          scoring = scoring,
                                          response_key_set = response_key_set, 
-                                         clock_position = clock_position, 
                                          display_general_instructions = display_general_instructions, 
                                          begin_block_message = begin_block_message, 
                                          post = post)
@@ -114,9 +110,9 @@ for (ppt in participant_number){
                         conflict_feedback )
   
   training_XML<- paste(preamble, instructions_train_ppt,
-                       mapaircraft_preamble,display_parameters, scoring,
+                       mapaircraft_preamble,display_parameters_training, scoring,
                        response_key_set,
-                       clock_position, training_maps, display_general_instructions,
+                       clock_position_training, training_maps, display_general_instructions,
                        begin_block_message,
                        training_trials, post)
   

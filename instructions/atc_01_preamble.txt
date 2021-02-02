@@ -20,10 +20,16 @@
 	atc:idx='RJB_001'>
 
     <atc:global>
-        <atc:variable atc:name='score'              atc:type='int' 		atc:init='0' 	atc:value='0'/>
-        <atc:variable atc:name='grand_total_score'  atc:type='int' 		atc:init='0' 	atc:value='0'/>
-		<atc:variable atc:name='trial_conflict_type' 		atc:type='string' 	atc:init_str='' atc:value_str=''/>
-		<atc:variable atc:name='participant_decision' atc:type='string' atc:init_str='' atc:value_str=''/>
+        <atc:variable atc:name='score'              									atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='correct_decisions'  									atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='incorrect_decisions'  									atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='incorrect_descisions_with_correct_recommendation'       atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='incorrect_descisions_with_incorrect_recommendation'     atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='accuracy'  												atc:type='int' 		atc:init='0' 	atc:value='0'/>
+        <atc:variable atc:name='grand_total_score'  									atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='trial_count' 											atc:type='int' 		atc:init='0' 	atc:value='0'/>
+		<atc:variable atc:name='trial_conflict_type' 									atc:type='string' 	atc:init_str='' atc:value_str=''/>
+		<atc:variable atc:name='participant_decision' 									atc:type='string' 	atc:init_str='' atc:value_str=''/>
     </atc:global>
     
     

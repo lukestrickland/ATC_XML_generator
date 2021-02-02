@@ -14,10 +14,16 @@ read_trial_csv <- function(csvname, training=FALSE){
 #outputs: string of complete XML script
 
 create_xml_script <- function(ppt, cond, sess, preamble, instructions_key,
-                              instructions_gen, mapaircraft_preamble, 
-                              display_parameters, scoring, response_key_set, clock_position,
+                              instructions_gen, mapaircraft_preamble, scoring, 
+                              response_key_set,
                               display_general_instructions, begin_block_message, post){
   
+  clock_position <- toString(readtext(file = paste(
+    'instructions/atc_08_clock_position','_', cond, '.txt', sep = "")))
+  
+  display_parameters <- toString(readtext(file = paste(
+    'instructions/atc_06_display_parameters','_', cond, '.txt', sep = "")))
+                      
   instructions_cond <- toString(readtext(file = paste(
     'instructions/atc_02_instructions_condition_', cond ,'.txt', sep = "")))
   

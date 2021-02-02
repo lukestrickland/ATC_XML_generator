@@ -7,7 +7,6 @@
     <atc:conflictDeclarationActions atc:score_change='true' atc:end_trial='true'>
       <atc:conflict_key>f</atc:conflict_key>
       <atc:non_conflict_key>j</atc:non_conflict_key>
-      <atc:other_key>d</atc:other_key>
     </atc:conflictDeclarationActions>
 
 <!--#####################################################################################################-->

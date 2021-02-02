@@ -50,10 +50,10 @@
 					<p align="center"><font face="calibri" size="8"><u>Your score:</u></font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
-					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials</font></p>
+					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials.</font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
-					<p align="center"><font face="calibri" size="6">You responded incorrectly on %d trials</font></p>
+					<p align="center"><font face="calibri" size="6">You responded incorrectly on %d trials.</font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
 					<p align="center"><font face="calibri" size="6"><b>Overall accuracy: %d%</b></font></p>
@@ -77,11 +77,11 @@
 					<p align="center"><font face="calibri" size="8"><u>Your score:</u></font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
-					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials</font></p>
+					<p align="center"><font face="calibri" size="6">You responded correctly on %d trials.</font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
 					<p align="center"><font face="calibri" size="6">When the automated recommendation was right,<br>
-					you incorrectly rejected the recommendation on %d trials</font></p>
+					you incorrectly rejected the recommendation on %d trials.</font></p>
 				</td></tr>
 				<tr><td align="left"><font face="calibri" size="1">
 					<p align="center"><font face="calibri" size="6">When the automated recommendation was wrong,<br>

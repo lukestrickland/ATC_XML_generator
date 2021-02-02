@@ -58,7 +58,8 @@ create_exp_var_df <- function(nPairs, callsigns){
 
 get_auto_fails <- function (auto_exp_var_df, num_fails) {
   
-  if (length(auto_exp_var_df$presOrder) %% 2 != 0) {
+  if ((length(auto_exp_var_df$presOrder) %% 2 != 0) |
+      (num_fails %% 2 != 0)) {
     stop("Can't assign equal conflicts/nonconflicts")
   }
   
@@ -253,6 +254,27 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
   presOrder <- exp_var_df$presOrder
   autorec <- exp_var_df$autorec
   
+  #another recommendation column for 
+  #Aaron's new recommendation variable
+  #write nothing if not auto condition
+  if (condition=="auto"){
+ 
+    recommendations <-
+      as.character(factor(
+        autorec,
+        levels = c("CONFLICT", "NON-CONF"),
+        labels = c("conflict", "nonconflict")
+      ))
+    rec <-
+      paste('<atc:recommendation>',
+            recommendations,
+            '</atc:recommendation>\n',
+            sep = "")
+  } else {
+    rec <- rep('', length(exp_var_df$autorec))
+    
+  }
+  
   #assign variables from sim_input_df
   x1 <- sim_input_df$x1
   x2 <- sim_input_df$x2
@@ -311,6 +333,7 @@ create_xml_ac_and_maps <- function (condition, exp_var_df, sim_input_df) {
       '<atc:aircraft>', ac2_cs[i], '</atc:aircraft>', '\n',
       '<atc:status>', stimulus[i], '</atc:status>', '\n',
       '<atc:finaltime>', 100, '</atc:finaltime>', '\n',
+           rec[i], 
       '</atc:aircraftstatus>',
       '</atc:sky>', '\n', sep = '')
     

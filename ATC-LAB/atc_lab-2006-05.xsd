@@ -126,16 +126,19 @@
 
     <xs:element name='variable'>
         <xs:complexType>
-            <xs:attribute name='name' use='required' type='xs:ID'            />
-            <xs:attribute name='type' use='required' type='atc:variableType' />
-            <xs:attribute name='init' use='optional' type='xs:int'           />
-            <xs:attribute name='value' use='optional' type='xs:int'           />
+            <xs:attribute name='name' 		use='required' type='xs:ID'            	/>
+            <xs:attribute name='type' 		use='required' type='atc:variableType' 	/>
+            <xs:attribute name='init' 		use='optional' type='xs:int'           	/>
+			<xs:attribute name='init_str' 	use='optional' type='xs:string'			/>
+            <xs:attribute name='value' 		use='optional' type='xs:int'           	/>
+			<xs:attribute name='value_str' 	use='optional' type='xs:string'        	/>
         </xs:complexType>
     </xs:element>
 
     <xs:simpleType name='variableType'>
         <xs:restriction base='xs:NCName'>
             <xs:enumeration value='int'     />
+			<xs:enumeration value='string'  />
         </xs:restriction>
     </xs:simpleType>
 
@@ -235,11 +238,19 @@
     <xs:restriction base='xs:NCName'>
       <xs:enumeration value='lessThan'            />
       <xs:enumeration value='lessThanOrEqualTo'   />
+	  <xs:enumeration value='equalTo'			  />
       <xs:enumeration value='greaterThan'         />
       <xs:enumeration value='greaterThanOrEqualTo'/>
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name='GlobalsComparison'>
+    <xs:restriction base='xs:NCName'>
+      <xs:enumeration value='equalTo'      />
+      <xs:enumeration value='notEqualTo'   />
+    </xs:restriction>
+  </xs:simpleType>
+  
   <xs:simpleType name='GlobalVariablesFormula'>
     <xs:restriction base='xs:NCName'>
       <xs:enumeration value='plus'      />
@@ -321,6 +332,7 @@
       <xs:element name='feedback'                   minOccurs='0' maxOccurs='unbounded' type='atc:feedbackDef'        />  <!-- Displays the difference between current score and self-referent/norm score-->
       <xs:element name='conditionalText'            minOccurs='0' maxOccurs='unbounded' type='atc:conditionalTextDef' />  <!-- Displays text based on comparison between the difference between current score and previous score/normative score and the set value -->
       <xs:element name='conditionalTextWithGlobals' minOccurs='0' maxOccurs='unbounded' type='atc:conditionalTextWithGlobalsDef' /> <!-- Displays text based on comparison between two global variables -->
+	  <xs:element name='conditionalTextWithGlobal'  minOccurs='0' maxOccurs='unbounded' type='atc:conditionalTextWithGlobalDef' /> <!-- Displays text based on comparison between a global and a user-specified value -->
       <xs:element name='condGlobalRef'              minOccurs='0' maxOccurs='unbounded' type='atc:condGlobalRefDef'   />
       <xs:element name='global_ref'                 minOccurs='0' maxOccurs='unbounded' type='xs:string'              />  <!-- Replace %d with a global variable's value -->
       <xs:element name='globalArrayRef'             minOccurs='0' maxOccurs='unbounded' type='atc:globalArrayRefDef'  />
@@ -330,6 +342,9 @@
     <xs:attributeGroup ref='atc:uniqueID' />
     <xs:attribute name='type' use='required' type='atc:feedbackType' />
     <xs:attribute name='type2' use='optional' type='atc:feedbackType' />
+	<xs:attribute name='idxref1' use='optional' type='xs:string' />
+	<xs:attribute name='comparison' use='optional' type='atc:GlobalsComparison' />
+	<xs:attribute name='idxref2' use='optional' type='xs:string' />
   </xs:complexType>
 
   <xs:complexType name='feedbackDef'>
@@ -407,6 +422,16 @@
     </xs:simpleContent>
   </xs:complexType>
 
+  <xs:complexType name='conditionalTextWithGlobalDef'>
+    <xs:simpleContent>
+      <xs:extension base='xs:string'>
+        <xs:attribute name='condition'    type='atc:ConditionalTextCondition'/>
+        <xs:attribute name='idxref'       type='xs:string'/>
+		<xs:attribute name='value_str'    type='xs:string'/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
   <xs:complexType name='conditionalTextWithGlobalsDef'>
     <xs:simpleContent>
       <xs:extension base='xs:string'>
@@ -1271,6 +1296,7 @@
         <xs:element name='aircraft'     type='xs:string' minOccurs='2' maxOccurs='2'/>
         <xs:element name='status'       type='atc:conflictType' />
         <xs:element name='finaltime'    type='xs:integer' minOccurs='0'/>
+		<xs:element name='recommendation'       type='atc:conflictType' minOccurs='0'/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

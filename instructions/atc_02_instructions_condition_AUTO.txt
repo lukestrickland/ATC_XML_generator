@@ -30,20 +30,20 @@
 		<atc:text>
 		<![CDATA[<qt>
 		<center>
-		    <table width="80%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
+		    <table width="100%" bgcolor="lightgrey" border="0" cellspacing="60" cellpadding="20">
 		    <tr><td align="left"><font face="calibri" size="1">
-				<p align="center"><font face="calibri" size="8">In the upcoming block of trials, you will be required to decide whether pairs of 
+				<p align="center"><font face="calibri" size="6">In the upcoming block of trials, you will be required to decide whether pairs of 
 				aircraft will reach conflict at any point during their flight.</font></p>
-				<p align="center"><font face="calibri" size="8">In this block you will be provided with an automated decision aid. The decision aid recommends a 
+				<p align="center"><font face="calibri" size="6">In this block you will be provided with an automated decision aid. The decision aid recommends a 
 				classification (conflict or non-conflict) for each aircraft pair.</font></p>
-				<p align="center"><font face="calibri" size="8">The automated recommendation for each aircraft pair is presented at the bottom of the data blocks of both aircraft. 
+				<p align="center"><font face="calibri" size="6">The automated recommendation for each aircraft pair is presented at the bottom of the data blocks of both aircraft. 
 				CONFLICT means that the automation is recommending classifying this pair as a conflict. NON-CONF means that the 
 				automation is recommending classifying this pair as a non-conflict.</font></p></font></p>
 			
-				<p align="center"><font face="calibri" size="8"><b>Although the automated decision aid is reliable, it is not perfect. 
-				In the event that the automated decision aid recommends an incorrect classification, it is essential that you choose the 
-				correct classification instead. Incorrectly following the automation's recommendation will result in a severe
-				penalty to your score. Thus, if you only rely only on automation, you will lose points over the block. </font></p></font></p>
+				<p align="center"><font face="calibri" size="6"><b> Although the automation is highly reliable, it is not perfect. 
+				In the event that the automation makes an incorrect recommendation, it is essential that you perform the correct action. Rejecting the automated recommendation when it is 
+				actually correct will reduce your performance score and subsequent bonus.
+				Accepting the automated recommendation when it is wrong  will result in a substantially greater reduction in your performance score and subsequent bonus.</font></p></font></p>
 				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>n</b> to continue.</font></p>
 				

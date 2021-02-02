@@ -31,16 +31,29 @@ training_data <- read.csv("data/exp_vars_p_ALL_s0_TRAINING.csv")
 conflict_status <-
   as.character(training_data$conflict_status[order(training_data$presOrder)])
 
-feedback <- c()
+#NOTE NO LONGER NEED OLD FEEDBACK ANYMORE BECAUSE TASK IS NOW PROGRAMMED
+# TO GIVE FEEDBACK
+# feedback <- c()
+# 
+# for (i in 1:length(conflict_status)){
+#   feedback[i] <- paste("\n<!-- Display Feedback --> \n<atc:phase atc:idx='training_trial_", 
+#                        i, "_feedback'> \n", "<atc:instruction atc:idxref='training", 
+#                        simpleCap(conflict_status[i]),
+#                        "Feedback'/> \n", "</atc:phase>\n\n", sep="")
+# }
+# 
+# training_trials$feedback <- feedback
 
-for (i in 1:length(conflict_status)){
-  feedback[i] <- paste("\n<!-- Display Feedback --> \n<atc:phase atc:idx='training_trial_", 
-                       i, "_feedback'> \n", "<atc:instruction atc:idxref='training", 
-                       simpleCap(conflict_status[i]),
-                       "Feedback'/> \n", "</atc:phase>\n\n", sep="")
-}
+#Add feedback at end 
 
-training_trials$feedback <- feedback
+training_trials <- rbind(
+  training_trials,
+  c(
+    "<atc:phase atc:idx='manfB'>\n",
+    "<atc:scoreFeedback atc:idxref='feedback_manual'/>\n",
+    "</atc:phase>"
+  )
+)
 
 write.csv(training_trials,
          'components/xml_trials_TRAINING.csv', row.names = FALSE)

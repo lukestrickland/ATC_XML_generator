@@ -37,7 +37,10 @@
 				<p align="center"><font face="calibri" size="8">In the upcoming block of trials, you will be required to decide whether pairs of 
 				aircraft will reach conflict at any point during their flight.</font></p>
 				<p align="center"><font face="calibri" size="8">In this block, there is no special information displayed at the bottom of the data blocks of the aircraft. 
-				There is simply a string '######', which you should ignore. </font></p></font></p>
+				There is simply a string '########', which you should ignore. </font></p></font></p>
+				
+				<p align="center"><font face="calibri" size="7"><b> Incorrect responses will reduce your performance score and subsequent bonus.</font></p></font></p>
+				
 				<p align="center"><font face="calibri" size="4"><font color="darkslategrey">Press <b>n</b> to continue.</font></p>
 				
 		    </font></td></tr>
